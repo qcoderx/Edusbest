@@ -1,42 +1,74 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Badge } from "@/components/ui/badge"
-import { Textarea } from "@/components/ui/textarea"
-import type { UserProfile } from "@/types/user-profile"
-import { Brain, BookOpen, Target, Loader2, Sparkles, MessageSquare, FileText } from "lucide-react"
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
+import type { UserProfile } from "@/types/user-profile";
+import {
+  Brain,
+  BookOpen,
+  Target,
+  Loader2,
+  Sparkles,
+  MessageSquare,
+  FileText,
+  Youtube,
+} from "lucide-react";
+import { useData } from "@/context/DataContext";
 
+// Correctly define the props interface for this component
 interface PersonalizedContentProps {
-  userProfile: UserProfile
+  userProfile: UserProfile;
+  selectedSubject: string;
+  onSubjectChange: (subject: string) => void;
 }
 
 interface GeneratedContent {
-  explanation: string
-  examples: string[]
+  explanation: string;
+  examples: string[];
   exercises: Array<{
-    question: string
-    difficulty: string
-    type: string
-  }>
-  tips: string[]
-  nextSteps: string[]
+    question: string;
+    difficulty: string;
+    type: string;
+  }>;
+  tips: string[];
+  nextSteps: string[];
+  youtubeSuggestions?: string[];
 }
 
-export function PersonalizedContent({ userProfile }: PersonalizedContentProps) {
-  const [selectedSubject, setSelectedSubject] = useState(userProfile.subjects[0]?.subject || "")
-  const [selectedTopic, setSelectedTopic] = useState("")
-  const [contentType, setContentType] = useState("lesson")
-  const [isGenerating, setIsGenerating] = useState(false)
-  const [generatedContent, setGeneratedContent] = useState<GeneratedContent | null>(null)
-  const [customPrompt, setCustomPrompt] = useState("")
+export function PersonalizedContent({
+  userProfile,
+  selectedSubject,
+  onSubjectChange,
+}: PersonalizedContentProps) {
+  const { addActivity } = useData();
+  const [selectedTopic, setSelectedTopic] = useState("");
+  const [contentType, setContentType] = useState("lesson");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generatedContent, setGeneratedContent] =
+    useState<GeneratedContent | null>(null);
+  const [customPrompt, setCustomPrompt] = useState("");
 
   const generateContent = async () => {
-    if (!selectedSubject) return
+    if (!selectedSubject) return;
 
-    setIsGenerating(true)
+    setIsGenerating(true);
+    setGeneratedContent(null); // Clear previous content
     try {
       const response = await fetch("/api/generate-personalized-content", {
         method: "POST",
@@ -48,58 +80,32 @@ export function PersonalizedContent({ userProfile }: PersonalizedContentProps) {
           contentType,
           customPrompt,
         }),
-      })
-      const data = await response.json()
-      setGeneratedContent(data.content)
+      });
+      const data = await response.json();
+      setGeneratedContent(data.content);
+      // Log the activity
+      addActivity({
+        subject: selectedSubject,
+        topic: `AI Content: ${selectedTopic || contentType}`,
+        type: "lesson",
+      });
     } catch (error) {
-      console.error("Error generating content:", error)
-      // Fallback content
-      setGeneratedContent({
-        explanation: `This personalized ${contentType} for ${selectedSubject} has been tailored to your ${userProfile.learningStyle.join(" and ")} learning style. The content is designed to match your current skill level and help you progress toward your goals.`,
-        examples: [
-          "Example 1: Practical application relevant to your interests",
-          "Example 2: Step-by-step breakdown for visual learners",
-          "Example 3: Real-world scenario to enhance understanding",
-        ],
-        exercises: [
-          {
-            question: "Practice question adapted to your skill level",
-            difficulty: "Beginner",
-            type: "Multiple Choice",
-          },
-          {
-            question: "Interactive exercise matching your learning style",
-            difficulty: "Intermediate",
-            type: "Problem Solving",
-          },
-          { question: "Challenge question to push your boundaries", difficulty: "Advanced", type: "Open Ended" },
-        ],
-        tips: [
-          "Focus on understanding concepts before memorizing",
-          "Practice regularly in short, focused sessions",
-          "Connect new learning to your existing knowledge",
-        ],
-        nextSteps: [
-          "Complete the practice exercises",
-          "Review any challenging concepts",
-          "Move to the next topic when ready",
-        ],
-      })
+      console.error("Error generating content:", error);
     } finally {
-      setIsGenerating(false)
+      setIsGenerating(false);
     }
-  }
+  };
 
   const contentTypes = [
     { value: "lesson", label: "Interactive Lesson", icon: BookOpen },
     { value: "practice", label: "Practice Session", icon: Target },
     { value: "explanation", label: "Concept Explanation", icon: MessageSquare },
     { value: "summary", label: "Topic Summary", icon: FileText },
-  ]
+  ];
 
   return (
     <div className="space-y-6">
-      {/* Content Generator */}
+      {/* Content Generator Card */}
       <Card className="border-0 shadow-xl bg-gradient-to-r from-purple-50 to-pink-50">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -114,7 +120,7 @@ export function PersonalizedContent({ userProfile }: PersonalizedContentProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <label className="text-sm font-medium">Subject</label>
-              <Select value={selectedSubject} onValueChange={setSelectedSubject}>
+              <Select value={selectedSubject} onValueChange={onSubjectChange}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select subject" />
                 </SelectTrigger>
@@ -132,10 +138,10 @@ export function PersonalizedContent({ userProfile }: PersonalizedContentProps) {
               <label className="text-sm font-medium">Topic (Optional)</label>
               <input
                 type="text"
-                placeholder="Enter specific topic"
+                placeholder="e.g., Photosynthesis, Algebra"
                 value={selectedTopic}
                 onChange={(e) => setSelectedTopic(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full px-3 py-2 border border-input bg-background rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
             </div>
 
@@ -157,9 +163,11 @@ export function PersonalizedContent({ userProfile }: PersonalizedContentProps) {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">Custom Request (Optional)</label>
+            <label className="text-sm font-medium">
+              Custom Request (Optional)
+            </label>
             <Textarea
-              placeholder="Describe what specific help you need or what you'd like to focus on..."
+              placeholder="Describe what specific help you need, e.g., 'Explain it like I'm 10' or 'Focus on real-world examples.'"
               value={customPrompt}
               onChange={(e) => setCustomPrompt(e.target.value)}
               className="min-h-[80px]"
@@ -170,7 +178,7 @@ export function PersonalizedContent({ userProfile }: PersonalizedContentProps) {
             <Button
               onClick={generateContent}
               disabled={isGenerating || !selectedSubject}
-              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
             >
               {isGenerating ? (
                 <>
@@ -184,45 +192,57 @@ export function PersonalizedContent({ userProfile }: PersonalizedContentProps) {
                 </>
               )}
             </Button>
-
-            <div className="flex flex-wrap gap-2">
-              <Badge variant="outline">Style: {userProfile.learningStyle.join(", ")}</Badge>
-              <Badge variant="outline">
-                Level: {userProfile.subjects.find((s) => s.subject === selectedSubject)?.currentLevel || "N/A"}
-              </Badge>
-              <Badge variant="outline">Goal: {userProfile.primaryGoals[0] || "Learning"}</Badge>
-            </div>
           </div>
         </CardContent>
       </Card>
 
       {/* Generated Content Display */}
+      {isGenerating && (
+        <Card className="border-0 shadow-lg">
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <Brain className="h-12 w-12 text-purple-500 animate-pulse mb-4" />
+            <h3 className="text-lg font-semibold mb-2">
+              Our AI is crafting your personalized content...
+            </h3>
+            <p className="text-gray-600 text-center">This may take a moment.</p>
+          </CardContent>
+        </Card>
+      )}
+
       {generatedContent && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Main Content */}
+        <div className="space-y-6">
           <Card className="border-0 shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <BookOpen className="h-5 w-5 text-blue-600" />
-                Personalized {contentTypes.find((t) => t.value === contentType)?.label}
+                Personalized{" "}
+                {contentTypes.find((t) => t.value === contentType)?.label}
               </CardTitle>
               <CardDescription>
-                Tailored for {selectedSubject} {selectedTopic && `- ${selectedTopic}`}
+                Tailored for {selectedSubject}{" "}
+                {selectedTopic && `- ${selectedTopic}`}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="prose prose-sm max-w-none">
                 <div className="p-4 bg-blue-50 rounded-lg">
-                  <h4 className="font-semibold text-blue-900 mb-2">Explanation</h4>
-                  <p className="text-blue-800 leading-relaxed">{generatedContent.explanation}</p>
+                  <h4 className="font-semibold text-blue-900 mb-2">
+                    Explanation
+                  </h4>
+                  <p className="text-blue-800 leading-relaxed whitespace-pre-wrap">
+                    {generatedContent.explanation}
+                  </p>
                 </div>
               </div>
 
-              {generatedContent.examples.length > 0 && (
+              {generatedContent.examples?.length > 0 && (
                 <div className="space-y-3">
                   <h4 className="font-semibold">Examples</h4>
                   {generatedContent.examples.map((example, index) => (
-                    <div key={index} className="p-3 bg-green-50 rounded-lg border-l-4 border-green-400">
+                    <div
+                      key={index}
+                      className="p-3 bg-green-50 rounded-lg border-l-4 border-green-400"
+                    >
                       <p className="text-green-800 text-sm">{example}</p>
                     </div>
                   ))}
@@ -231,7 +251,6 @@ export function PersonalizedContent({ userProfile }: PersonalizedContentProps) {
             </CardContent>
           </Card>
 
-          {/* Practice Exercises */}
           <Card className="border-0 shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -240,8 +259,11 @@ export function PersonalizedContent({ userProfile }: PersonalizedContentProps) {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {generatedContent.exercises.map((exercise, index) => (
-                <div key={index} className="p-4 border rounded-lg hover:bg-gray-50">
+              {generatedContent.exercises?.map((exercise, index) => (
+                <div
+                  key={index}
+                  className="p-4 border rounded-lg hover:bg-gray-50"
+                >
                   <div className="flex items-center justify-between mb-2">
                     <span className="font-medium">Exercise {index + 1}</span>
                     <div className="flex gap-2">
@@ -257,71 +279,64 @@ export function PersonalizedContent({ userProfile }: PersonalizedContentProps) {
               ))}
             </CardContent>
           </Card>
-        </div>
-      )}
 
-      {/* Tips and Next Steps */}
-      {generatedContent && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card className="border-0 shadow-lg">
-            <CardHeader>
-              <CardTitle className="text-lg">Learning Tips</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {generatedContent.tips.map((tip, index) => (
-                  <div key={index} className="flex items-start gap-3 p-3 bg-yellow-50 rounded-lg">
-                    <div className="w-6 h-6 bg-yellow-500 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
-                      {index + 1}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="border-0 shadow-lg">
+              <CardHeader>
+                <CardTitle className="text-lg">Learning Tips</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {generatedContent.tips?.map((tip, index) => (
+                    <div
+                      key={index}
+                      className="flex items-start gap-3 p-3 bg-yellow-50 rounded-lg"
+                    >
+                      <div className="w-6 h-6 bg-yellow-500 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
+                        {index + 1}
+                      </div>
+                      <p className="text-yellow-900 text-sm">{tip}</p>
                     </div>
-                    <p className="text-yellow-900 text-sm">{tip}</p>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-0 shadow-lg">
-            <CardHeader>
-              <CardTitle className="text-lg">Next Steps</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {generatedContent.nextSteps.map((step, index) => (
-                  <div key={index} className="flex items-center gap-3 p-3 bg-indigo-50 rounded-lg">
-                    <div className="w-6 h-6 bg-indigo-500 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
-                      {index + 1}
-                    </div>
-                    <p className="text-indigo-900 text-sm">{step}</p>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
-
-      {/* Empty State */}
-      {!generatedContent && (
-        <Card className="border-2 border-dashed border-gray-300">
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <Brain className="h-16 w-16 text-gray-400 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Ready to Generate Content</h3>
-            <p className="text-gray-600 text-center mb-6 max-w-md">
-              Select a subject and content type, then click "Generate Content" to create personalized learning materials
-              tailored specifically to your learning profile.
-            </p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-              {contentTypes.map((type) => (
-                <div key={type.value} className="p-4 bg-gray-50 rounded-lg">
-                  <type.icon className="h-8 w-8 text-gray-600 mx-auto mb-2" />
-                  <p className="text-sm font-medium text-gray-700">{type.label}</p>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
+
+            {generatedContent.youtubeSuggestions &&
+              generatedContent.youtubeSuggestions.length > 0 && (
+                <Card className="border-0 shadow-lg">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Youtube className="h-5 w-5 text-red-600" />
+                      Recommended Videos
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-2">
+                      {generatedContent.youtubeSuggestions.map(
+                        (suggestion, index) => (
+                          <li key={index} className="flex items-center gap-2">
+                            <Youtube className="h-4 w-4 text-red-500" />
+                            <a
+                              href={`https://www.youtube.com/results?search_query=${encodeURIComponent(
+                                suggestion
+                              )}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:underline text-sm"
+                            >
+                              {suggestion}
+                            </a>
+                          </li>
+                        )
+                      )}
+                    </ul>
+                  </CardContent>
+                </Card>
+              )}
+          </div>
+        </div>
       )}
     </div>
-  )
+  );
 }

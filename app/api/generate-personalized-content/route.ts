@@ -43,6 +43,11 @@ Create comprehensive learning content that includes:
 3. Practice exercises with varying difficulty levels
 4. Personalized learning tips based on their challenges and preferences
 5. Clear next steps for continued learning
+${
+  userProfile.learningStyle.includes("visual")
+    ? `6. Since the user is a visual learner, please also suggest 3-5 relevant YouTube video topics or search queries that would help them understand the content. Format this as an array of strings under a "youtubeSuggestions" key in the JSON response.`
+    : ""
+}
 
 Adapt the content specifically for:
 - ${
@@ -71,7 +76,11 @@ Incorporate their motivation factors: ${userProfile.motivationFactors.join(
       ", "
     )}
 
-Format as JSON with: explanation, examples[], exercises[{question, difficulty, type}], tips[], nextSteps[]`;
+Format as JSON with: explanation, examples[], exercises[{question, difficulty, type}], tips[], nextSteps[]${
+      userProfile.learningStyle.includes("visual")
+        ? ", youtubeSuggestions[]"
+        : ""
+    }`;
 
     let text: string | null = null;
     try {
@@ -138,6 +147,13 @@ Format as JSON with: explanation, examples[], exercises[{question, difficulty, t
           "Review any challenging concepts",
           "Move to the next topic when ready",
         ],
+        youtubeSuggestions: userProfile.learningStyle.includes("visual")
+          ? [
+              `"Introduction to ${topic || subject} for beginners"`,
+              `"Visual explanation of ${topic || subject}"`,
+              `"Real-world examples of ${topic || subject}"`,
+            ]
+          : [],
       };
     }
 

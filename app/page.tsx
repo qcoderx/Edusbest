@@ -13,36 +13,45 @@ import { BookOpen, Brain, TrendingUp, Users } from "lucide-react";
 import { useState, useEffect } from "react";
 import { OnboardingFlow } from "@/components/onboarding-flow";
 import type { UserProfile } from "@/types/user-profile";
-import { useLocalStorage } from "@/hooks/use-local-storage";
+import { useData } from "@/context/DataContext";
+import type { StudentData } from "@/types/learning-data";
 
 export default function HomePage() {
-  const [userProfile, setUserProfile] = useLocalStorage<UserProfile | null>(
-    "userProfile",
-    null
-  );
+  const { studentData, updateStudentData, resetStudentData } = useData();
   const [isOnboarding, setIsOnboarding] = useState(false);
 
+  // Check for student data on component mount to decide if onboarding is needed
   useEffect(() => {
-    const profile = localStorage.getItem("userProfile");
-    if (!profile) {
+    if (!studentData) {
       setIsOnboarding(true);
+    } else {
+      setIsOnboarding(false);
     }
-  }, []);
+  }, [studentData]);
 
+  // Handler for when onboarding is completed
   const handleOnboardingComplete = (profile: UserProfile) => {
-    setUserProfile(profile);
+    const initialData: StudentData = {
+      profile,
+      activities: [],
+      stats: { streakDays: 0, totalPoints: 0 },
+    };
+    updateStudentData(initialData);
     setIsOnboarding(false);
   };
 
+  // Handler to reset profile and re-start onboarding
   const handleResetProfile = () => {
-    setUserProfile(null);
+    resetStudentData();
     setIsOnboarding(true);
   };
 
-  if (isOnboarding || !userProfile) {
+  // Render onboarding flow if needed
+  if (isOnboarding || !studentData) {
     return <OnboardingFlow onComplete={handleOnboardingComplete} />;
   }
 
+  // Render main page if profile exists
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="container mx-auto px-4 py-16">
@@ -67,6 +76,14 @@ export default function HomePage() {
               </Button>
             </Link>
           </div>
+          <Button
+            size="sm"
+            variant="link"
+            onClick={handleResetProfile}
+            className="mt-4"
+          >
+            Reset Profile and Start Onboarding
+          </Button>
         </div>
 
         {/* Features Grid */}

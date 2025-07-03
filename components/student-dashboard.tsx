@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -13,44 +13,48 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BookOpen, Brain, TrendingUp, Clock, Award } from "lucide-react";
-import { LearningPath } from "./learning-path";
-import { PerformanceChart } from "./performance-chart";
-import { AdaptiveContent } from "./adaptive-content";
-import type { UserProfile } from "@/types/user-profile";
-import { useLocalStorage } from "@/hooks/use-local-storage";
-
-const recentActivities = [
-  {
-    subject: "Mathematics",
-    topic: "Quadratic Equations",
-    score: 85,
-    time: "2 hours ago",
-  },
-  {
-    subject: "Science",
-    topic: "Chemical Reactions",
-    score: 92,
-    time: "1 day ago",
-  },
-  {
-    subject: "English",
-    topic: "Essay Structure",
-    score: 76,
-    time: "2 days ago",
-  },
-  { subject: "History", topic: "World War II", score: 88, time: "3 days ago" },
-];
+import { AdaptiveLearningPath } from "./adaptive-learning-path";
+import { PersonalizedContent } from "./personalized-content";
+import { ProgressAnalytics } from "./progress-analytics";
+import { useData } from "@/context/DataContext";
+import { formatDistanceToNow } from "date-fns";
+import Link from "next/link";
 
 export function StudentDashboard() {
-  const [userProfile] = useLocalStorage<UserProfile | null>(
-    "userProfile",
-    null
-  );
-  const [selectedSubject, setSelectedSubject] = useState("Mathematics");
+  const { studentData } = useData();
 
-  if (!userProfile) {
-    return <div>Loading profile...</div>;
+  // Set initial subject, defaulting to the first one if available
+  const [selectedSubject, setSelectedSubject] = useState(
+    studentData?.profile.subjects[0]?.subject || ""
+  );
+
+  // Loading state while data is fetched from localStorage
+  if (!studentData) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center">
+          <p className="mb-4">Loading student profile...</p>
+          <p className="text-sm text-gray-500 mb-4">
+            If you're new, please start from the homepage.
+          </p>
+          <Link href="/">
+            <Button>Go to Homepage</Button>
+          </Link>
+        </div>
+      </div>
+    );
   }
+
+  const { profile, activities, stats } = studentData;
+
+  // Calculate overall progress dynamically
+  const overallProgress =
+    profile.subjects.length > 0
+      ? profile.subjects.reduce((acc, subject) => {
+          const progress = (subject.currentLevel / subject.targetLevel) * 100;
+          return acc + progress;
+        }, 0) / profile.subjects.length
+      : 0;
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -58,11 +62,11 @@ export function StudentDashboard() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome back, {userProfile.name}!
+            Welcome back, {profile.name}!
           </h1>
           <p className="text-gray-600">
-            {userProfile.gradeLevel} • {userProfile.difficultyPreference} Level
-            • {userProfile.learningStyle.join(", ")} Learner
+            {profile.gradeLevel} • {profile.difficultyPreference} Level •{" "}
+            {profile.learningStyle.join(", ")} Learner
           </p>
         </div>
 
@@ -76,8 +80,10 @@ export function StudentDashboard() {
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">78%</div>
-              <Progress value={78} className="mt-2" />
+              <div className="text-2xl font-bold">
+                {Math.round(overallProgress)}%
+              </div>
+              <Progress value={overallProgress} className="mt-2" />
             </CardContent>
           </Card>
 
@@ -89,7 +95,7 @@ export function StudentDashboard() {
               <Clock className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">12 days</div>
+              <div className="text-2xl font-bold">{stats.streakDays} days</div>
               <p className="text-xs text-muted-foreground">Keep it up!</p>
             </CardContent>
           </Card>
@@ -102,8 +108,16 @@ export function StudentDashboard() {
               <Award className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">2,450</div>
-              <p className="text-xs text-muted-foreground">+150 this week</p>
+              <div className="text-2xl font-bold">
+                {stats.totalPoints.toLocaleString()}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                +
+                {activities
+                  .slice(0, 5)
+                  .reduce((acc, act) => acc + (act.score || 10), 0)}{" "}
+                this week
+              </p>
             </CardContent>
           </Card>
 
@@ -116,7 +130,7 @@ export function StudentDashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {userProfile.subjects.length}
+                {profile.subjects.length}
               </div>
               <p className="text-xs text-muted-foreground">All on track</p>
             </CardContent>
@@ -133,67 +147,19 @@ export function StudentDashboard() {
           </TabsList>
 
           <TabsContent value="learning-path">
-            <LearningPath studentData={userProfile} />
+            <AdaptiveLearningPath userProfile={profile} />
           </TabsContent>
 
           <TabsContent value="adaptive-content">
-            <AdaptiveContent
-              studentData={userProfile}
-              selectedSubject={selectedSubject}
+            <PersonalizedContent
+              userProfile={profile}
               onSubjectChange={setSelectedSubject}
+              selectedSubject={selectedSubject}
             />
           </TabsContent>
 
           <TabsContent value="performance">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <PerformanceChart />
-              <Card>
-                <CardHeader>
-                  <CardTitle>AI Insights</CardTitle>
-                  <CardDescription>
-                    Personalized recommendations based on your performance
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <h4 className="font-semibold text-green-700">Strengths</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {userProfile.motivationFactors.map((strength, index) => (
-                        <Badge
-                          key={index}
-                          variant="secondary"
-                          className="bg-green-100 text-green-800"
-                        >
-                          {strength}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <h4 className="font-semibold text-orange-700">
-                      Areas for Improvement
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {userProfile.learningChallenges.map((area, index) => (
-                        <Badge
-                          key={index}
-                          variant="secondary"
-                          className="bg-orange-100 text-orange-800"
-                        >
-                          {area}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="pt-4">
-                    <Button className="w-full">
-                      <Brain className="mr-2 h-4 w-4" />
-                      Get Detailed AI Analysis
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+            <ProgressAnalytics userProfile={profile} />
           </TabsContent>
 
           <TabsContent value="activities">
@@ -206,28 +172,44 @@ export function StudentDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {recentActivities.map((activity, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between p-4 border rounded-lg"
-                    >
-                      <div className="flex items-center space-x-4">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                        <div>
-                          <h4 className="font-semibold">{activity.topic}</h4>
-                          <p className="text-sm text-gray-600">
-                            {activity.subject}
+                  {activities.length > 0 ? (
+                    activities.map((activity) => (
+                      <div
+                        key={activity.id}
+                        className="flex items-center justify-between p-4 border rounded-lg"
+                      >
+                        <div className="flex items-center space-x-4">
+                          <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                          <div>
+                            <h4 className="font-semibold">{activity.topic}</h4>
+                            <p className="text-sm text-gray-600">
+                              {activity.subject} -{" "}
+                              <span className="capitalize">
+                                {activity.type}
+                              </span>
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          {activity.score && (
+                            <div className="font-semibold text-lg">
+                              {activity.score}%
+                            </div>
+                          )}
+                          <p className="text-xs text-gray-500">
+                            {formatDistanceToNow(
+                              new Date(activity.completedAt),
+                              { addSuffix: true }
+                            )}
                           </p>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <div className="font-semibold text-lg">
-                          {activity.score}%
-                        </div>
-                        <p className="text-xs text-gray-500">{activity.time}</p>
-                      </div>
-                    </div>
-                  ))}
+                    ))
+                  ) : (
+                    <p className="text-center text-gray-500">
+                      No activities yet. Start a lesson to see your progress!
+                    </p>
+                  )}
                 </div>
               </CardContent>
             </Card>
