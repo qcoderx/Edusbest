@@ -1,5 +1,7 @@
 import { generateText } from "ai";
 import { type NextRequest, NextResponse } from "next/server";
+// Import the Google AI SDK provider
+import { google } from "@ai-sdk/google";
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,17 +21,12 @@ export async function POST(request: NextRequest) {
 
     Format the response as JSON with sections: explanation, problems, tips`;
 
-    /**
-     * Dynamically import the Google SDK so that, if it can’t be loaded
-     * in the preview sandbox, we can gracefully fall back to stub data.
-     */
     let text: string | null = null;
     try {
-      const { google } = await import("@ai-sdk/google");
+      // The @ai-sdk/google library automatically picks up GOOGLE_API_KEY from process.env
+      // So, you don't need to pass it explicitly in the model configuration.
       const result = await generateText({
-        model: google("gemini-1.5-flash", {
-          apiKey: process.env.API_KEY,
-        }),
+        model: google("gemini-1.5-flash"), // API key is now picked from GOOGLE_API_KEY env var
         prompt,
         system:
           "You are an expert educational content creator specialising in personalised learning. Always respond with valid JSON.",

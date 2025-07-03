@@ -1,13 +1,19 @@
-import { generateText } from "ai"
-import { google } from "@ai-sdk/google"
-import { type NextRequest, NextResponse } from "next/server"
+import { generateText } from "ai";
+import { google } from "@ai-sdk/google";
+import { type NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
-    const { userProfile, subject, topic, difficulty, questionCount } = await request.json()
+    // Destructure userProfile, subject, topic, difficulty, and questionCount from the request body
+    const { userProfile, subject, topic, difficulty, questionCount } =
+      await request.json();
 
-    const subjectInfo = userProfile.subjects.find((s: any) => s.subject === subject)
+    // Find the specific subject's info from the user profile, if available
+    const subjectInfo = userProfile.subjects.find(
+      (s: any) => s.subject === subject
+    );
 
+    // Construct the detailed prompt for the AI quiz generation model
     const prompt = `Generate a personalized quiz for a student with the following profile:
 
 Student Profile:
@@ -44,22 +50,63 @@ Format as JSON with:
       "learning_objective": "What this tests"
     }
   ]
-}`
+}`;
 
-    const { text } = await generateText({
-      model: google("gemini-1.5-flash", {
-        apiKey: process.env.API_KEY,
-      }),
-      prompt,
-      system:
-        "You are an expert educational assessment creator. Generate fair, engaging quizzes that accurately assess student understanding while being appropriate for their learning level. Always respond with valid JSON.",
-    })
-
-    let quiz
+    let text: string | null = null;
     try {
-      quiz = JSON.parse(text)
-    } catch {
-      // Fallback quiz
+      // Call the Google Generative AI model using @ai-sdk/google
+      // The API key is automatically picked up from the GOOGLE_API_KEY environment variable.
+      const result = await generateText({
+        model: google("gemini-1.5-flash"), // API key is now picked from GOOGLE_API_KEY env var
+        prompt,
+        system:
+          "You are an expert educational assessment creator. Generate fair, engaging quizzes that accurately assess student understanding while being appropriate for their learning level. Always respond with valid JSON.",
+      });
+      text = result.text;
+    } catch (sdkError) {
+      console.warn(
+        "Gemini SDK unavailable in preview – returning stub content.",
+        sdkError
+      );
+      // Fallback text in case of an SDK error or preview environment
+      text = JSON.stringify({
+        title: `${subject} Quiz - ${topic || "General"} (Fallback)`,
+        instructions:
+          "Answer all questions to the best of your ability. Take your time and think through each question carefully. (Fallback)",
+        questions: [
+          {
+            id: 1,
+            type: "multiple_choice",
+            question: "Sample question adapted to your level (Fallback)",
+            options: ["Option A", "Option B", "Option C", "Option D"],
+            correct_answer: "Option A",
+            explanation: "This is the correct answer because... (Fallback)",
+            difficulty: difficulty || "Medium",
+            learning_objective: "Test basic understanding (Fallback)",
+          },
+          {
+            id: 2,
+            type: "short_answer",
+            question: "Another sample question for you (Fallback)",
+            correct_answer: "Sample Answer",
+            explanation: "This answer explains... (Fallback)",
+            difficulty: difficulty || "Medium",
+            learning_objective: "Test deeper understanding (Fallback)",
+          },
+        ],
+      });
+    }
+
+    let quiz;
+    try {
+      // Attempt to parse the AI-generated text as JSON
+      quiz = JSON.parse(text);
+    } catch (parseError) {
+      console.error(
+        "Failed to parse AI response as JSON, using fallback:",
+        parseError
+      );
+      // Fallback quiz if JSON parsing fails
       quiz = {
         title: `${subject} Quiz - ${topic || "General"}`,
         instructions:
@@ -75,13 +122,28 @@ Format as JSON with:
             difficulty: difficulty || "Medium",
             learning_objective: "Test basic understanding",
           },
+          {
+            id: 2,
+            type: "short_answer",
+            question: "Another sample question for you",
+            correct_answer: "Sample Answer",
+            explanation: "This answer explains...",
+            difficulty: difficulty || "Medium",
+            learning_objective: "Test deeper understanding",
+          },
         ],
-      }
+      };
     }
 
-    return NextResponse.json({ quiz })
+    // Return the generated or fallback quiz as a JSON response
+    return NextResponse.json({ quiz });
   } catch (error) {
-    console.error("Error generating quiz:", error)
-    return NextResponse.json({ error: "Failed to generate quiz" }, { status: 500 })
+    // Log any errors that occur during the process
+    console.error("Error generating quiz:", error);
+    // Return an error response to the client
+    return NextResponse.json(
+      { error: "Failed to generate quiz" },
+      { status: 500 }
+    );
   }
 }

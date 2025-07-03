@@ -1,16 +1,19 @@
 import { generateText } from "ai";
 import { type NextRequest, NextResponse } from "next/server";
-import { google } from "@ai-sdk/google"; // Declare the google variable here
+import { google } from "@ai-sdk/google"; // Google AI SDK provider
 
 export async function POST(request: NextRequest) {
   try {
+    // Destructure userProfile and new content parameters from the request body
     const { userProfile, subject, topic, contentType, customPrompt } =
       await request.json();
 
+    // Find the specific subject's info from the user profile, if available
     const subjectInfo = userProfile.subjects.find(
       (s: any) => s.subject === subject
     );
 
+    // Construct the detailed prompt for the AI model
     const prompt = `Generate personalized ${contentType} content for a student with the following profile:
 
 Student Profile:
@@ -26,7 +29,7 @@ Subject Details:
 - Subject: ${subject}
 - Current Level: ${subjectInfo?.currentLevel || 5}/10
 - Target Level: ${subjectInfo?.targetLevel || 8}/10
-- Weekly Hours: ${subjectInfo?.weeklyHours || 3}
+- Weekly Hours: ${subjectInfo?.weeklyHours || 3}h/week
 - Topic Focus: ${topic || "General concepts"}
 
 Content Requirements:
@@ -70,20 +73,35 @@ Incorporate their motivation factors: ${userProfile.motivationFactors.join(
 
 Format as JSON with: explanation, examples[], exercises[{question, difficulty, type}], tips[], nextSteps[]`;
 
-    const { text } = await generateText({
-      model: google("gemini-1.5-flash", {
-        apiKey: process.env.API_KEY,
-      }),
-      prompt,
-      system:
-        "You are an expert educational content creator specializing in personalized, adaptive learning. Create engaging, tailored content that matches the student's learning profile perfectly. Always respond with valid JSON.",
-    });
+    let text: string | null = null;
+    try {
+      // Call the Google Generative AI model using @ai-sdk/google
+      // The API key is automatically picked up from the GOOGLE_API_KEY environment variable.
+      const result = await generateText({
+        model: google("gemini-1.5-flash"), // No explicit apiKey needed here
+        prompt,
+        system:
+          "You are an expert educational content creator specializing in personalized, adaptive learning. Create engaging, tailored content that matches the student's learning profile perfectly. Always respond with valid JSON.",
+      });
+      text = result.text;
+    } catch (sdkError) {
+      console.warn(
+        "Gemini SDK unavailable in preview – returning stub content.",
+        sdkError
+      );
+    }
 
     let content;
     try {
-      content = JSON.parse(text);
+      // Attempt to parse the AI-generated text as JSON
+      content = text ? JSON.parse(text) : null;
     } catch {
-      // Fallback content
+      // If parsing fails, set content to null to trigger the fallback
+      content = null;
+    }
+
+    // Fallback stub content in case AI generation fails or returns invalid JSON
+    if (!content) {
       content = {
         explanation: `This personalized ${contentType} for ${subject} has been tailored to your ${userProfile.learningStyle.join(
           " and "
@@ -123,9 +141,12 @@ Format as JSON with: explanation, examples[], exercises[{question, difficulty, t
       };
     }
 
+    // Return the generated or fallback content as a JSON response
     return NextResponse.json({ content });
   } catch (error) {
+    // Log any errors that occur during the process
     console.error("Error generating personalized content:", error);
+    // Return an error response to the client
     return NextResponse.json(
       { error: "Failed to generate content" },
       { status: 500 }
