@@ -1,59 +1,84 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Slider } from "@/components/ui/slider"
-import { Progress } from "@/components/ui/progress"
-import { Badge } from "@/components/ui/badge"
-import type { UserProfile, SubjectPreference } from "@/types/user-profile"
-import { ChevronRight, ChevronLeft, Sparkles, Brain, Target, Clock, BookOpen, Settings } from "lucide-react"
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Slider } from "@/components/ui/slider";
+import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+import type { UserProfile, SubjectPreference } from "@/types/user-profile";
+import {
+  ChevronRight,
+  ChevronLeft,
+  Sparkles,
+  Brain,
+  Target,
+  Clock,
+  BookOpen,
+  Settings,
+} from "lucide-react";
+import { useLocalStorage } from "@/hooks/use-local-storage";
 
 interface OnboardingFlowProps {
-  onComplete: (profile: UserProfile) => void
+  onComplete: (profile: UserProfile) => void;
 }
 
-const TOTAL_STEPS = 7
+const TOTAL_STEPS = 7;
 
 export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
-  const [currentStep, setCurrentStep] = useState(1)
-  const [formData, setFormData] = useState<Partial<UserProfile>>({
-    subjects: [],
-    learningStyle: [],
-    preferredStudyTime: [],
-    studyDays: [],
-    learningChallenges: [],
-    motivationFactors: [],
-    primaryGoals: [],
-    shortTermGoals: [],
-    longTermGoals: [],
-    currentSkillLevels: {},
-  })
+  const [currentStep, setCurrentStep] = useState(1);
+  const [formData, setFormData] = useLocalStorage<Partial<UserProfile>>(
+    "userProfile",
+    {
+      subjects: [],
+      learningStyle: [],
+      preferredStudyTime: [],
+      studyDays: [],
+      learningChallenges: [],
+      motivationFactors: [],
+      primaryGoals: [],
+      shortTermGoals: [],
+      longTermGoals: [],
+      currentSkillLevels: {},
+    }
+  );
 
   const updateFormData = (updates: Partial<UserProfile>) => {
-    setFormData((prev) => ({ ...prev, ...updates }))
-  }
+    setFormData((prev) => ({ ...prev, ...updates }));
+  };
 
   const handleNext = () => {
     if (currentStep < TOTAL_STEPS) {
-      setCurrentStep(currentStep + 1)
+      setCurrentStep(currentStep + 1);
     } else {
-      onComplete(formData as UserProfile)
+      onComplete(formData as UserProfile);
     }
-  }
+  };
 
   const handlePrevious = () => {
     if (currentStep > 1) {
-      setCurrentStep(currentStep - 1)
+      setCurrentStep(currentStep - 1);
     }
-  }
+  };
 
-  const progress = (currentStep / TOTAL_STEPS) * 100
+  const progress = (currentStep / TOTAL_STEPS) * 100;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
@@ -68,7 +93,9 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
           <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
             Adaptive Learning Setup
           </h1>
-          <p className="text-gray-600 text-lg">Let's personalize your learning journey</p>
+          <p className="text-gray-600 text-lg">
+            Let's personalize your learning journey
+          </p>
         </div>
 
         {/* Progress Bar */}
@@ -84,12 +111,36 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
 
         {/* Step Content */}
         <div className="max-w-2xl mx-auto">
-          {currentStep === 1 && <PersonalInfoStep formData={formData} updateFormData={updateFormData} />}
-          {currentStep === 2 && <LearningStyleStep formData={formData} updateFormData={updateFormData} />}
-          {currentStep === 3 && <SubjectPreferencesStep formData={formData} updateFormData={updateFormData} />}
-          {currentStep === 4 && <ScheduleStep formData={formData} updateFormData={updateFormData} />}
-          {currentStep === 5 && <LearningCharacteristicsStep formData={formData} updateFormData={updateFormData} />}
-          {currentStep === 6 && <GoalsStep formData={formData} updateFormData={updateFormData} />}
+          {currentStep === 1 && (
+            <PersonalInfoStep
+              formData={formData}
+              updateFormData={updateFormData}
+            />
+          )}
+          {currentStep === 2 && (
+            <LearningStyleStep
+              formData={formData}
+              updateFormData={updateFormData}
+            />
+          )}
+          {currentStep === 3 && (
+            <SubjectPreferencesStep
+              formData={formData}
+              updateFormData={updateFormData}
+            />
+          )}
+          {currentStep === 4 && (
+            <ScheduleStep formData={formData} updateFormData={updateFormData} />
+          )}
+          {currentStep === 5 && (
+            <LearningCharacteristicsStep
+              formData={formData}
+              updateFormData={updateFormData}
+            />
+          )}
+          {currentStep === 6 && (
+            <GoalsStep formData={formData} updateFormData={updateFormData} />
+          )}
           {currentStep === 7 && <ReviewStep formData={formData} />}
         </div>
 
@@ -109,18 +160,23 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
             className="flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600"
           >
             {currentStep === TOTAL_STEPS ? "Complete Setup" : "Next"}
-            {currentStep !== TOTAL_STEPS && <ChevronRight className="h-4 w-4" />}
+            {currentStep !== TOTAL_STEPS && (
+              <ChevronRight className="h-4 w-4" />
+            )}
           </Button>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function PersonalInfoStep({
   formData,
   updateFormData,
-}: { formData: Partial<UserProfile>; updateFormData: (updates: Partial<UserProfile>) => void }) {
+}: {
+  formData: Partial<UserProfile>;
+  updateFormData: (updates: Partial<UserProfile>) => void;
+}) {
   return (
     <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
       <CardHeader className="text-center pb-6">
@@ -128,7 +184,9 @@ function PersonalInfoStep({
           <BookOpen className="h-6 w-6 text-blue-600" />
         </div>
         <CardTitle className="text-2xl">Tell us about yourself</CardTitle>
-        <CardDescription className="text-base">Basic information to personalize your experience</CardDescription>
+        <CardDescription className="text-base">
+          Basic information to personalize your experience
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -153,7 +211,9 @@ function PersonalInfoStep({
               type="number"
               placeholder="Your age"
               value={formData.age || ""}
-              onChange={(e) => updateFormData({ age: Number.parseInt(e.target.value) })}
+              onChange={(e) =>
+                updateFormData({ age: Number.parseInt(e.target.value) })
+              }
               className="h-12"
             />
           </div>
@@ -162,7 +222,10 @@ function PersonalInfoStep({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
             <Label className="text-sm font-medium">Grade Level</Label>
-            <Select value={formData.gradeLevel || ""} onValueChange={(value) => updateFormData({ gradeLevel: value })}>
+            <Select
+              value={formData.gradeLevel || ""}
+              onValueChange={(value) => updateFormData({ gradeLevel: value })}
+            >
               <SelectTrigger className="h-12">
                 <SelectValue placeholder="Select grade level" />
               </SelectTrigger>
@@ -176,10 +239,14 @@ function PersonalInfoStep({
             </Select>
           </div>
           <div className="space-y-2">
-            <Label className="text-sm font-medium">Educational Background</Label>
+            <Label className="text-sm font-medium">
+              Educational Background
+            </Label>
             <Select
               value={formData.educationBackground || ""}
-              onValueChange={(value) => updateFormData({ educationBackground: value })}
+              onValueChange={(value) =>
+                updateFormData({ educationBackground: value })
+              }
             >
               <SelectTrigger className="h-12">
                 <SelectValue placeholder="Select background" />
@@ -196,24 +263,42 @@ function PersonalInfoStep({
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function LearningStyleStep({
   formData,
   updateFormData,
-}: { formData: Partial<UserProfile>; updateFormData: (updates: Partial<UserProfile>) => void }) {
+}: {
+  formData: Partial<UserProfile>;
+  updateFormData: (updates: Partial<UserProfile>) => void;
+}) {
   const learningStyles = [
-    { id: "visual", label: "Visual", description: "Learn through images, diagrams, and visual aids", icon: "👁️" },
-    { id: "auditory", label: "Auditory", description: "Learn through listening and verbal instruction", icon: "👂" },
+    {
+      id: "visual",
+      label: "Visual",
+      description: "Learn through images, diagrams, and visual aids",
+      icon: "👁️",
+    },
+    {
+      id: "auditory",
+      label: "Auditory",
+      description: "Learn through listening and verbal instruction",
+      icon: "👂",
+    },
     {
       id: "kinesthetic",
       label: "Kinesthetic",
       description: "Learn through hands-on activities and movement",
       icon: "✋",
     },
-    { id: "reading", label: "Reading/Writing", description: "Learn through text and written materials", icon: "📝" },
-  ]
+    {
+      id: "reading",
+      label: "Reading/Writing",
+      description: "Learn through text and written materials",
+      icon: "📝",
+    },
+  ];
 
   const studyTimes = [
     { id: "early-morning", label: "Early Morning", time: "5:00 AM - 8:00 AM" },
@@ -221,19 +306,23 @@ function LearningStyleStep({
     { id: "afternoon", label: "Afternoon", time: "12:00 PM - 5:00 PM" },
     { id: "evening", label: "Evening", time: "5:00 PM - 9:00 PM" },
     { id: "night", label: "Night", time: "9:00 PM - 12:00 AM" },
-  ]
+  ];
 
   const toggleLearningStyle = (style: string) => {
-    const current = formData.learningStyle || []
-    const updated = current.includes(style) ? current.filter((s) => s !== style) : [...current, style]
-    updateFormData({ learningStyle: updated })
-  }
+    const current = formData.learningStyle || [];
+    const updated = current.includes(style)
+      ? current.filter((s) => s !== style)
+      : [...current, style];
+    updateFormData({ learningStyle: updated });
+  };
 
   const toggleStudyTime = (time: string) => {
-    const current = formData.preferredStudyTime || []
-    const updated = current.includes(time) ? current.filter((t) => t !== time) : [...current, time]
-    updateFormData({ preferredStudyTime: updated })
-  }
+    const current = formData.preferredStudyTime || [];
+    const updated = current.includes(time)
+      ? current.filter((t) => t !== time)
+      : [...current, time];
+    updateFormData({ preferredStudyTime: updated });
+  };
 
   return (
     <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
@@ -242,7 +331,9 @@ function LearningStyleStep({
           <Brain className="h-6 w-6 text-purple-600" />
         </div>
         <CardTitle className="text-2xl">How do you learn best?</CardTitle>
-        <CardDescription className="text-base">Select all learning styles that apply to you</CardDescription>
+        <CardDescription className="text-base">
+          Select all learning styles that apply to you
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-8">
         <div className="space-y-4">
@@ -262,9 +353,13 @@ function LearningStyleStep({
                   <span className="text-2xl">{style.icon}</span>
                   <div className="flex-1">
                     <h4 className="font-semibold">{style.label}</h4>
-                    <p className="text-sm text-gray-600 mt-1">{style.description}</p>
+                    <p className="text-sm text-gray-600 mt-1">
+                      {style.description}
+                    </p>
                   </div>
-                  <Checkbox checked={formData.learningStyle?.includes(style.id)} />
+                  <Checkbox
+                    checked={formData.learningStyle?.includes(style.id)}
+                  />
                 </div>
               </div>
             ))}
@@ -289,7 +384,9 @@ function LearningStyleStep({
                     <h4 className="font-medium">{time.label}</h4>
                     <p className="text-sm text-gray-600">{time.time}</p>
                   </div>
-                  <Checkbox checked={formData.preferredStudyTime?.includes(time.id)} />
+                  <Checkbox
+                    checked={formData.preferredStudyTime?.includes(time.id)}
+                  />
                 </div>
               </div>
             ))}
@@ -299,11 +396,15 @@ function LearningStyleStep({
         <div className="space-y-4">
           <h3 className="font-semibold text-lg">Attention Span</h3>
           <div className="space-y-3">
-            <Label className="text-sm">How long can you typically focus on learning? (minutes)</Label>
+            <Label className="text-sm">
+              How long can you typically focus on learning? (minutes)
+            </Label>
             <div className="px-4">
               <Slider
                 value={[formData.attentionSpan || 30]}
-                onValueChange={(value) => updateFormData({ attentionSpan: value[0] })}
+                onValueChange={(value) =>
+                  updateFormData({ attentionSpan: value[0] })
+                }
                 max={120}
                 min={10}
                 step={5}
@@ -311,7 +412,9 @@ function LearningStyleStep({
               />
               <div className="flex justify-between text-sm text-gray-500 mt-2">
                 <span>10 min</span>
-                <span className="font-medium">{formData.attentionSpan || 30} minutes</span>
+                <span className="font-medium">
+                  {formData.attentionSpan || 30} minutes
+                </span>
                 <span>120 min</span>
               </div>
             </div>
@@ -319,13 +422,16 @@ function LearningStyleStep({
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function SubjectPreferencesStep({
   formData,
   updateFormData,
-}: { formData: Partial<UserProfile>; updateFormData: (updates: Partial<UserProfile>) => void }) {
+}: {
+  formData: Partial<UserProfile>;
+  updateFormData: (updates: Partial<UserProfile>) => void;
+}) {
   const availableSubjects = [
     "Mathematics",
     "Science",
@@ -342,10 +448,10 @@ function SubjectPreferencesStep({
     "Chemistry",
     "Physics",
     "Biology",
-  ]
+  ];
 
   const addSubject = (subject: string) => {
-    const current = formData.subjects || []
+    const current = formData.subjects || [];
     if (!current.find((s) => s.subject === subject)) {
       const newSubject: SubjectPreference = {
         subject,
@@ -353,21 +459,26 @@ function SubjectPreferencesStep({
         currentLevel: 5,
         targetLevel: 8,
         weeklyHours: 3,
-      }
-      updateFormData({ subjects: [...current, newSubject] })
+      };
+      updateFormData({ subjects: [...current, newSubject] });
     }
-  }
+  };
 
   const removeSubject = (subject: string) => {
-    const current = formData.subjects || []
-    updateFormData({ subjects: current.filter((s) => s.subject !== subject) })
-  }
+    const current = formData.subjects || [];
+    updateFormData({ subjects: current.filter((s) => s.subject !== subject) });
+  };
 
-  const updateSubject = (subject: string, updates: Partial<SubjectPreference>) => {
-    const current = formData.subjects || []
-    const updated = current.map((s) => (s.subject === subject ? { ...s, ...updates } : s))
-    updateFormData({ subjects: updated })
-  }
+  const updateSubject = (
+    subject: string,
+    updates: Partial<SubjectPreference>
+  ) => {
+    const current = formData.subjects || [];
+    const updated = current.map((s) =>
+      s.subject === subject ? { ...s, ...updates } : s
+    );
+    updateFormData({ subjects: updated });
+  };
 
   return (
     <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
@@ -376,7 +487,9 @@ function SubjectPreferencesStep({
           <Target className="h-6 w-6 text-green-600" />
         </div>
         <CardTitle className="text-2xl">What subjects interest you?</CardTitle>
-        <CardDescription className="text-base">Choose subjects and set your learning goals</CardDescription>
+        <CardDescription className="text-base">
+          Choose subjects and set your learning goals
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="space-y-4">
@@ -385,13 +498,17 @@ function SubjectPreferencesStep({
             {availableSubjects.map((subject) => (
               <Badge
                 key={subject}
-                variant={formData.subjects?.find((s) => s.subject === subject) ? "default" : "outline"}
+                variant={
+                  formData.subjects?.find((s) => s.subject === subject)
+                    ? "default"
+                    : "outline"
+                }
                 className="cursor-pointer px-3 py-1 hover:bg-indigo-100"
                 onClick={() => {
                   if (formData.subjects?.find((s) => s.subject === subject)) {
-                    removeSubject(subject)
+                    removeSubject(subject);
                   } else {
-                    addSubject(subject)
+                    addSubject(subject);
                   }
                 }}
               >
@@ -406,7 +523,10 @@ function SubjectPreferencesStep({
             <h3 className="font-semibold text-lg">Subject Details</h3>
             <div className="space-y-4">
               {formData.subjects.map((subject) => (
-                <div key={subject.subject} className="p-4 border rounded-lg bg-gray-50">
+                <div
+                  key={subject.subject}
+                  className="p-4 border rounded-lg bg-gray-50"
+                >
                   <div className="flex items-center justify-between mb-4">
                     <h4 className="font-medium">{subject.subject}</h4>
                     <Button
@@ -424,36 +544,54 @@ function SubjectPreferencesStep({
                       <Label className="text-sm">Current Level (1-10)</Label>
                       <Slider
                         value={[subject.currentLevel]}
-                        onValueChange={(value) => updateSubject(subject.subject, { currentLevel: value[0] })}
+                        onValueChange={(value) =>
+                          updateSubject(subject.subject, {
+                            currentLevel: value[0],
+                          })
+                        }
                         max={10}
                         min={1}
                         step={1}
                       />
-                      <div className="text-center text-sm text-gray-600">{subject.currentLevel}</div>
+                      <div className="text-center text-sm text-gray-600">
+                        {subject.currentLevel}
+                      </div>
                     </div>
 
                     <div className="space-y-2">
                       <Label className="text-sm">Target Level (1-10)</Label>
                       <Slider
                         value={[subject.targetLevel]}
-                        onValueChange={(value) => updateSubject(subject.subject, { targetLevel: value[0] })}
+                        onValueChange={(value) =>
+                          updateSubject(subject.subject, {
+                            targetLevel: value[0],
+                          })
+                        }
                         max={10}
                         min={1}
                         step={1}
                       />
-                      <div className="text-center text-sm text-gray-600">{subject.targetLevel}</div>
+                      <div className="text-center text-sm text-gray-600">
+                        {subject.targetLevel}
+                      </div>
                     </div>
 
                     <div className="space-y-2">
                       <Label className="text-sm">Weekly Hours</Label>
                       <Slider
                         value={[subject.weeklyHours]}
-                        onValueChange={(value) => updateSubject(subject.subject, { weeklyHours: value[0] })}
+                        onValueChange={(value) =>
+                          updateSubject(subject.subject, {
+                            weeklyHours: value[0],
+                          })
+                        }
                         max={20}
                         min={1}
                         step={1}
                       />
-                      <div className="text-center text-sm text-gray-600">{subject.weeklyHours}h</div>
+                      <div className="text-center text-sm text-gray-600">
+                        {subject.weeklyHours}h
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -463,20 +601,33 @@ function SubjectPreferencesStep({
         )}
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function ScheduleStep({
   formData,
   updateFormData,
-}: { formData: Partial<UserProfile>; updateFormData: (updates: Partial<UserProfile>) => void }) {
-  const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+}: {
+  formData: Partial<UserProfile>;
+  updateFormData: (updates: Partial<UserProfile>) => void;
+}) {
+  const daysOfWeek = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
 
   const toggleStudyDay = (day: string) => {
-    const current = formData.studyDays || []
-    const updated = current.includes(day) ? current.filter((d) => d !== day) : [...current, day]
-    updateFormData({ studyDays: updated })
-  }
+    const current = formData.studyDays || [];
+    const updated = current.includes(day)
+      ? current.filter((d) => d !== day)
+      : [...current, day];
+    updateFormData({ studyDays: updated });
+  };
 
   return (
     <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
@@ -485,16 +636,22 @@ function ScheduleStep({
           <Clock className="h-6 w-6 text-orange-600" />
         </div>
         <CardTitle className="text-2xl">Plan your study schedule</CardTitle>
-        <CardDescription className="text-base">Help us create the perfect learning schedule for you</CardDescription>
+        <CardDescription className="text-base">
+          Help us create the perfect learning schedule for you
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-3">
-            <Label className="text-sm font-medium">Available Hours Per Week</Label>
+            <Label className="text-sm font-medium">
+              Available Hours Per Week
+            </Label>
             <div className="px-4">
               <Slider
                 value={[formData.availableHours || 10]}
-                onValueChange={(value) => updateFormData({ availableHours: value[0] })}
+                onValueChange={(value) =>
+                  updateFormData({ availableHours: value[0] })
+                }
                 max={40}
                 min={2}
                 step={1}
@@ -502,18 +659,24 @@ function ScheduleStep({
               />
               <div className="flex justify-between text-sm text-gray-500 mt-2">
                 <span>2 hours</span>
-                <span className="font-medium">{formData.availableHours || 10} hours/week</span>
+                <span className="font-medium">
+                  {formData.availableHours || 10} hours/week
+                </span>
                 <span>40 hours</span>
               </div>
             </div>
           </div>
 
           <div className="space-y-3">
-            <Label className="text-sm font-medium">Preferred Session Length (minutes)</Label>
+            <Label className="text-sm font-medium">
+              Preferred Session Length (minutes)
+            </Label>
             <div className="px-4">
               <Slider
                 value={[formData.preferredSessionLength || 45]}
-                onValueChange={(value) => updateFormData({ preferredSessionLength: value[0] })}
+                onValueChange={(value) =>
+                  updateFormData({ preferredSessionLength: value[0] })
+                }
                 max={180}
                 min={15}
                 step={15}
@@ -521,7 +684,9 @@ function ScheduleStep({
               />
               <div className="flex justify-between text-sm text-gray-500 mt-2">
                 <span>15 min</span>
-                <span className="font-medium">{formData.preferredSessionLength || 45} minutes</span>
+                <span className="font-medium">
+                  {formData.preferredSessionLength || 45} minutes
+                </span>
                 <span>3 hours</span>
               </div>
             </div>
@@ -552,14 +717,18 @@ function ScheduleStep({
           <Label className="text-sm font-medium">Study Environment</Label>
           <Select
             value={formData.studyEnvironment || ""}
-            onValueChange={(value) => updateFormData({ studyEnvironment: value })}
+            onValueChange={(value) =>
+              updateFormData({ studyEnvironment: value })
+            }
           >
             <SelectTrigger className="h-12">
               <SelectValue placeholder="Select your preferred study environment" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="quiet-room">Quiet Room</SelectItem>
-              <SelectItem value="background-music">With Background Music</SelectItem>
+              <SelectItem value="background-music">
+                With Background Music
+              </SelectItem>
               <SelectItem value="library">Library Setting</SelectItem>
               <SelectItem value="cafe">Cafe/Social Environment</SelectItem>
               <SelectItem value="outdoors">Outdoors</SelectItem>
@@ -569,13 +738,16 @@ function ScheduleStep({
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function LearningCharacteristicsStep({
   formData,
   updateFormData,
-}: { formData: Partial<UserProfile>; updateFormData: (updates: Partial<UserProfile>) => void }) {
+}: {
+  formData: Partial<UserProfile>;
+  updateFormData: (updates: Partial<UserProfile>) => void;
+}) {
   const challenges = [
     "Attention/Focus Issues",
     "Dyslexia",
@@ -585,7 +757,7 @@ function LearningCharacteristicsStep({
     "Processing Speed",
     "Language Barriers",
     "Time Management",
-  ]
+  ];
 
   const motivationFactors = [
     "Achievement/Grades",
@@ -596,19 +768,23 @@ function LearningCharacteristicsStep({
     "Helping Others",
     "Curiosity",
     "Creative Expression",
-  ]
+  ];
 
   const toggleChallenge = (challenge: string) => {
-    const current = formData.learningChallenges || []
-    const updated = current.includes(challenge) ? current.filter((c) => c !== challenge) : [...current, challenge]
-    updateFormData({ learningChallenges: updated })
-  }
+    const current = formData.learningChallenges || [];
+    const updated = current.includes(challenge)
+      ? current.filter((c) => c !== challenge)
+      : [...current, challenge];
+    updateFormData({ learningChallenges: updated });
+  };
 
   const toggleMotivation = (factor: string) => {
-    const current = formData.motivationFactors || []
-    const updated = current.includes(factor) ? current.filter((f) => f !== factor) : [...current, factor]
-    updateFormData({ motivationFactors: updated })
-  }
+    const current = formData.motivationFactors || [];
+    const updated = current.includes(factor)
+      ? current.filter((f) => f !== factor)
+      : [...current, factor];
+    updateFormData({ motivationFactors: updated });
+  };
 
   return (
     <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
@@ -617,12 +793,18 @@ function LearningCharacteristicsStep({
           <Settings className="h-6 w-6 text-red-600" />
         </div>
         <CardTitle className="text-2xl">Learning characteristics</CardTitle>
-        <CardDescription className="text-base">Help us understand your learning profile better</CardDescription>
+        <CardDescription className="text-base">
+          Help us understand your learning profile better
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-8">
         <div className="space-y-4">
-          <h3 className="font-semibold text-lg">Learning Challenges (Optional)</h3>
-          <p className="text-sm text-gray-600">Select any challenges that might affect your learning</p>
+          <h3 className="font-semibold text-lg">
+            Learning Challenges (Optional)
+          </h3>
+          <p className="text-sm text-gray-600">
+            Select any challenges that might affect your learning
+          </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {challenges.map((challenge) => (
               <div
@@ -636,7 +818,9 @@ function LearningCharacteristicsStep({
               >
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">{challenge}</span>
-                  <Checkbox checked={formData.learningChallenges?.includes(challenge)} />
+                  <Checkbox
+                    checked={formData.learningChallenges?.includes(challenge)}
+                  />
                 </div>
               </div>
             ))}
@@ -644,7 +828,9 @@ function LearningCharacteristicsStep({
         </div>
 
         <div className="space-y-4">
-          <h3 className="font-semibold text-lg">What motivates you to learn?</h3>
+          <h3 className="font-semibold text-lg">
+            What motivates you to learn?
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {motivationFactors.map((factor) => (
               <div
@@ -658,7 +844,9 @@ function LearningCharacteristicsStep({
               >
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">{factor}</span>
-                  <Checkbox checked={formData.motivationFactors?.includes(factor)} />
+                  <Checkbox
+                    checked={formData.motivationFactors?.includes(factor)}
+                  />
                 </div>
               </div>
             ))}
@@ -670,14 +858,18 @@ function LearningCharacteristicsStep({
             <Label className="text-sm font-medium">Difficulty Preference</Label>
             <Select
               value={formData.difficultyPreference || ""}
-              onValueChange={(value) => updateFormData({ difficultyPreference: value })}
+              onValueChange={(value) =>
+                updateFormData({ difficultyPreference: value })
+              }
             >
               <SelectTrigger className="h-12">
                 <SelectValue placeholder="Select difficulty preference" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="gradual">Gradual Progression</SelectItem>
-                <SelectItem value="challenging">Challenging from Start</SelectItem>
+                <SelectItem value="challenging">
+                  Challenging from Start
+                </SelectItem>
                 <SelectItem value="mixed">Mixed Difficulty</SelectItem>
                 <SelectItem value="adaptive">Fully Adaptive</SelectItem>
               </SelectContent>
@@ -688,7 +880,9 @@ function LearningCharacteristicsStep({
             <Label className="text-sm font-medium">Feedback Preference</Label>
             <Select
               value={formData.feedbackPreference || ""}
-              onValueChange={(value) => updateFormData({ feedbackPreference: value })}
+              onValueChange={(value) =>
+                updateFormData({ feedbackPreference: value })
+              }
             >
               <SelectTrigger className="h-12">
                 <SelectValue placeholder="Select feedback preference" />
@@ -704,13 +898,16 @@ function LearningCharacteristicsStep({
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function GoalsStep({
   formData,
   updateFormData,
-}: { formData: Partial<UserProfile>; updateFormData: (updates: Partial<UserProfile>) => void }) {
+}: {
+  formData: Partial<UserProfile>;
+  updateFormData: (updates: Partial<UserProfile>) => void;
+}) {
   const primaryGoals = [
     "Improve Grades",
     "Prepare for Exams",
@@ -720,13 +917,15 @@ function GoalsStep({
     "Academic Requirements",
     "Certification",
     "Competition Prep",
-  ]
+  ];
 
   const togglePrimaryGoal = (goal: string) => {
-    const current = formData.primaryGoals || []
-    const updated = current.includes(goal) ? current.filter((g) => g !== goal) : [...current, goal]
-    updateFormData({ primaryGoals: updated })
-  }
+    const current = formData.primaryGoals || [];
+    const updated = current.includes(goal)
+      ? current.filter((g) => g !== goal)
+      : [...current, goal];
+    updateFormData({ primaryGoals: updated });
+  };
 
   return (
     <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
@@ -734,8 +933,12 @@ function GoalsStep({
         <div className="mx-auto w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
           <Sparkles className="h-6 w-6 text-yellow-600" />
         </div>
-        <CardTitle className="text-2xl">What are your learning goals?</CardTitle>
-        <CardDescription className="text-base">Define what you want to achieve</CardDescription>
+        <CardTitle className="text-2xl">
+          What are your learning goals?
+        </CardTitle>
+        <CardDescription className="text-base">
+          Define what you want to achieve
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="space-y-4">
@@ -768,7 +971,13 @@ function GoalsStep({
             id="shortTermGoals"
             placeholder="What do you want to achieve in the next 3 months?"
             value={formData.shortTermGoals?.join("\n") || ""}
-            onChange={(e) => updateFormData({ shortTermGoals: e.target.value.split("\n").filter((g) => g.trim()) })}
+            onChange={(e) =>
+              updateFormData({
+                shortTermGoals: e.target.value
+                  .split("\n")
+                  .filter((g) => g.trim()),
+              })
+            }
             className="min-h-[100px]"
           />
         </div>
@@ -781,7 +990,13 @@ function GoalsStep({
             id="longTermGoals"
             placeholder="What are your long-term learning objectives?"
             value={formData.longTermGoals?.join("\n") || ""}
-            onChange={(e) => updateFormData({ longTermGoals: e.target.value.split("\n").filter((g) => g.trim()) })}
+            onChange={(e) =>
+              updateFormData({
+                longTermGoals: e.target.value
+                  .split("\n")
+                  .filter((g) => g.trim()),
+              })
+            }
             className="min-h-[100px]"
           />
         </div>
@@ -794,13 +1009,15 @@ function GoalsStep({
             id="targetDate"
             type="date"
             value={formData.targetCompletionDate || ""}
-            onChange={(e) => updateFormData({ targetCompletionDate: e.target.value })}
+            onChange={(e) =>
+              updateFormData({ targetCompletionDate: e.target.value })
+            }
             className="h-12"
           />
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function ReviewStep({ formData }: { formData: Partial<UserProfile> }) {
@@ -812,24 +1029,35 @@ function ReviewStep({ formData }: { formData: Partial<UserProfile> }) {
         </div>
         <CardTitle className="text-2xl">Review your profile</CardTitle>
         <CardDescription className="text-base">
-          Make sure everything looks correct before we create your personalized learning experience
+          Make sure everything looks correct before we create your personalized
+          learning experience
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
             <div className="p-4 bg-blue-50 rounded-lg">
-              <h3 className="font-semibold text-blue-900 mb-2">Personal Info</h3>
+              <h3 className="font-semibold text-blue-900 mb-2">
+                Personal Info
+              </h3>
               <p className="text-sm text-blue-800">Name: {formData.name}</p>
               <p className="text-sm text-blue-800">Age: {formData.age}</p>
-              <p className="text-sm text-blue-800">Grade: {formData.gradeLevel}</p>
+              <p className="text-sm text-blue-800">
+                Grade: {formData.gradeLevel}
+              </p>
             </div>
 
             <div className="p-4 bg-purple-50 rounded-lg">
-              <h3 className="font-semibold text-purple-900 mb-2">Learning Style</h3>
+              <h3 className="font-semibold text-purple-900 mb-2">
+                Learning Style
+              </h3>
               <div className="flex flex-wrap gap-1">
                 {formData.learningStyle?.map((style) => (
-                  <Badge key={style} variant="secondary" className="text-xs bg-purple-200 text-purple-800">
+                  <Badge
+                    key={style}
+                    variant="secondary"
+                    className="text-xs bg-purple-200 text-purple-800"
+                  >
                     {style}
                   </Badge>
                 ))}
@@ -838,18 +1066,30 @@ function ReviewStep({ formData }: { formData: Partial<UserProfile> }) {
 
             <div className="p-4 bg-green-50 rounded-lg">
               <h3 className="font-semibold text-green-900 mb-2">Schedule</h3>
-              <p className="text-sm text-green-800">{formData.availableHours}h/week</p>
-              <p className="text-sm text-green-800">{formData.preferredSessionLength} min sessions</p>
-              <p className="text-sm text-green-800">{formData.studyDays?.length} study days</p>
+              <p className="text-sm text-green-800">
+                {formData.availableHours}h/week
+              </p>
+              <p className="text-sm text-green-800">
+                {formData.preferredSessionLength} min sessions
+              </p>
+              <p className="text-sm text-green-800">
+                {formData.studyDays?.length} study days
+              </p>
             </div>
           </div>
 
           <div className="space-y-4">
             <div className="p-4 bg-orange-50 rounded-lg">
-              <h3 className="font-semibold text-orange-900 mb-2">Subjects ({formData.subjects?.length})</h3>
+              <h3 className="font-semibold text-orange-900 mb-2">
+                Subjects ({formData.subjects?.length})
+              </h3>
               <div className="flex flex-wrap gap-1">
                 {formData.subjects?.map((subject) => (
-                  <Badge key={subject.subject} variant="secondary" className="text-xs bg-orange-200 text-orange-800">
+                  <Badge
+                    key={subject.subject}
+                    variant="secondary"
+                    className="text-xs bg-orange-200 text-orange-800"
+                  >
                     {subject.subject}
                   </Badge>
                 ))}
@@ -860,7 +1100,11 @@ function ReviewStep({ formData }: { formData: Partial<UserProfile> }) {
               <h3 className="font-semibold text-yellow-900 mb-2">Goals</h3>
               <div className="flex flex-wrap gap-1">
                 {formData.primaryGoals?.map((goal) => (
-                  <Badge key={goal} variant="secondary" className="text-xs bg-yellow-200 text-yellow-800">
+                  <Badge
+                    key={goal}
+                    variant="secondary"
+                    className="text-xs bg-yellow-200 text-yellow-800"
+                  >
                     {goal}
                   </Badge>
                 ))}
@@ -869,13 +1113,19 @@ function ReviewStep({ formData }: { formData: Partial<UserProfile> }) {
 
             <div className="p-4 bg-red-50 rounded-lg">
               <h3 className="font-semibold text-red-900 mb-2">Preferences</h3>
-              <p className="text-sm text-red-800">Difficulty: {formData.difficultyPreference}</p>
-              <p className="text-sm text-red-800">Feedback: {formData.feedbackPreference}</p>
-              <p className="text-sm text-red-800">Environment: {formData.studyEnvironment}</p>
+              <p className="text-sm text-red-800">
+                Difficulty: {formData.difficultyPreference}
+              </p>
+              <p className="text-sm text-red-800">
+                Feedback: {formData.feedbackPreference}
+              </p>
+              <p className="text-sm text-red-800">
+                Environment: {formData.studyEnvironment}
+              </p>
             </div>
           </div>
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
