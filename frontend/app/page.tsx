@@ -111,16 +111,16 @@ export default function HomePage() {
                 variant="ghost"
                 size="sm"
                 onClick={toggleTheme}
-                className="p-2"
+                className="p-3 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-200 hover:scale-105"
               >
                 {theme === 'light' ? (
-                  <Moon className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+                  <Moon className="h-5 w-5 text-gray-600 dark:text-gray-300 drop-shadow-md" />
                 ) : (
-                  <Sun className="h-5 w-5 text-gray-300" />
+                  <Sun className="h-5 w-5 text-yellow-400 drop-shadow-md" />
                 )}
               </Button>
               <Link href="/student">
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6 py-2 text-sm font-semibold transition-all duration-200 hover:scale-105 shadow-lg">
                   Get Started
                   <ChevronRight className="ml-2 h-4 w-4" />
                 </Button>

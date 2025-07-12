@@ -81,36 +81,36 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
   const progress = (currentStep / TOTAL_STEPS) * 100;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-white to-purple-100 dark:from-gray-900 dark:via-gray-950 dark:to-indigo-900 transition-colors duration-500 animate-gradient-move">
+      <div className="container mx-auto px-4 py-12">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center mb-4">
-            <div className="p-3 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full">
-              <Brain className="h-8 w-8 text-white" />
+        <div className="text-center mb-10">
+          <div className="flex items-center justify-center mb-5">
+            <div className="p-4 bg-gradient-to-r from-indigo-500 to-purple-600 dark:from-indigo-700 dark:to-purple-800 shadow-lg rounded-full animate-bounce-slow">
+              <Brain className="h-10 w-10 text-white drop-shadow-lg" />
             </div>
           </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
+          <h1 className="text-5xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent mb-3 tracking-tight animate-fade-in">
             Adaptive Learning Setup
           </h1>
-          <p className="text-gray-600 text-lg">
+          <p className="text-gray-700 dark:text-gray-300 text-xl animate-fade-in delay-100">
             Let's personalize your learning journey
           </p>
         </div>
 
         {/* Progress Bar */}
-        <div className="max-w-2xl mx-auto mb-8">
-          <div className="flex justify-between text-sm text-gray-500 mb-2">
+        <div className="max-w-2xl mx-auto mb-10 animate-fade-in delay-200">
+          <div className="flex justify-between text-base text-gray-500 dark:text-gray-400 mb-2">
             <span>
               Step {currentStep} of {TOTAL_STEPS}
             </span>
             <span>{Math.round(progress)}% Complete</span>
           </div>
-          <Progress value={progress} className="h-3" />
+          <Progress value={progress} className="h-3 rounded-full bg-gradient-to-r from-indigo-200 to-purple-200 dark:from-indigo-800 dark:to-purple-800" />
         </div>
 
         {/* Step Content */}
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-2xl mx-auto animate-fade-in delay-300">
           {currentStep === 1 && (
             <PersonalInfoStep
               formData={formData}
@@ -145,23 +145,23 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
         </div>
 
         {/* Navigation */}
-        <div className="max-w-2xl mx-auto mt-8 flex justify-between">
+        <div className="max-w-2xl mx-auto mt-10 flex justify-between animate-fade-in delay-400">
           <Button
             variant="outline"
             onClick={handlePrevious}
             disabled={currentStep === 1}
-            className="flex items-center gap-2 bg-transparent"
+            className="flex items-center gap-2 bg-white/60 dark:bg-gray-900/60 border-2 border-indigo-200 dark:border-indigo-800 shadow hover:scale-105 transition-transform duration-200"
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-5 w-5" />
             Previous
           </Button>
           <Button
             onClick={handleNext}
-            className="flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600"
+            className="flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 dark:from-indigo-700 dark:to-purple-800 shadow-lg hover:scale-105 transition-transform duration-200 text-white px-8 py-3 text-lg font-semibold rounded-xl"
           >
             {currentStep === TOTAL_STEPS ? "Complete Setup" : "Next"}
             {currentStep !== TOTAL_STEPS && (
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-5 w-5" />
             )}
           </Button>
         </div>
@@ -178,12 +178,12 @@ function PersonalInfoStep({
   updateFormData: (updates: Partial<UserProfile>) => void;
 }) {
   return (
-    <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+    <Card className="border-0 shadow-2xl bg-white/90 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl transition-all duration-300 hover:shadow-3xl hover:-translate-y-1">
       <CardHeader className="text-center pb-6">
         <div className="mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-          <BookOpen className="h-6 w-6 text-blue-600" />
+          <BookOpen className="h-6 w-6 text-blue-600 drop-shadow-md" />
         </div>
-        <CardTitle className="text-2xl">Tell us about yourself</CardTitle>
+        <CardTitle className="text-2xl font-extrabold">Tell us about yourself</CardTitle>
         <CardDescription className="text-base">
           Basic information to personalize your experience
         </CardDescription>
@@ -199,7 +199,7 @@ function PersonalInfoStep({
               placeholder="Enter your full name"
               value={formData.name || ""}
               onChange={(e) => updateFormData({ name: e.target.value })}
-              className="h-12"
+              className="h-12 px-4 py-2 rounded-lg border border-indigo-200 dark:border-indigo-800 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-700 transition-all"
             />
           </div>
           <div className="space-y-2">
@@ -214,7 +214,7 @@ function PersonalInfoStep({
               onChange={(e) =>
                 updateFormData({ age: Number.parseInt(e.target.value) })
               }
-              className="h-12"
+              className="h-12 px-4 py-2 rounded-lg border border-indigo-200 dark:border-indigo-800 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-700 transition-all"
             />
           </div>
         </div>
@@ -226,15 +226,15 @@ function PersonalInfoStep({
               value={formData.gradeLevel || ""}
               onValueChange={(value) => updateFormData({ gradeLevel: value })}
             >
-              <SelectTrigger className="h-12">
+              <SelectTrigger className="h-12 px-4 py-2 rounded-lg border border-indigo-200 dark:border-indigo-800 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-700 transition-all">
                 <SelectValue placeholder="Select grade level" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="elementary">Elementary (K-5)</SelectItem>
-                <SelectItem value="middle">Middle School (6-8)</SelectItem>
-                <SelectItem value="high">High School (9-12)</SelectItem>
-                <SelectItem value="college">College/University</SelectItem>
-                <SelectItem value="adult">Adult Learner</SelectItem>
+                <SelectItem value="elementary" className="hover:scale-105 transition-transform">Elementary (K-5)</SelectItem>
+                <SelectItem value="middle" className="hover:scale-105 transition-transform">Middle School (6-8)</SelectItem>
+                <SelectItem value="high" className="hover:scale-105 transition-transform">High School (9-12)</SelectItem>
+                <SelectItem value="college" className="hover:scale-105 transition-transform">College/University</SelectItem>
+                <SelectItem value="adult" className="hover:scale-105 transition-transform">Adult Learner</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -248,15 +248,15 @@ function PersonalInfoStep({
                 updateFormData({ educationBackground: value })
               }
             >
-              <SelectTrigger className="h-12">
+              <SelectTrigger className="h-12 px-4 py-2 rounded-lg border border-indigo-200 dark:border-indigo-800 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-700 transition-all">
                 <SelectValue placeholder="Select background" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="traditional">Traditional School</SelectItem>
-                <SelectItem value="homeschool">Homeschooled</SelectItem>
-                <SelectItem value="online">Online Learning</SelectItem>
-                <SelectItem value="mixed">Mixed/Hybrid</SelectItem>
-                <SelectItem value="self-taught">Self-Taught</SelectItem>
+                <SelectItem value="traditional" className="hover:scale-105 transition-transform">Traditional School</SelectItem>
+                <SelectItem value="homeschool" className="hover:scale-105 transition-transform">Homeschooled</SelectItem>
+                <SelectItem value="online" className="hover:scale-105 transition-transform">Online Learning</SelectItem>
+                <SelectItem value="mixed" className="hover:scale-105 transition-transform">Mixed/Hybrid</SelectItem>
+                <SelectItem value="self-taught" className="hover:scale-105 transition-transform">Self-Taught</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -325,12 +325,12 @@ function LearningStyleStep({
   };
 
   return (
-    <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+    <Card className="border-0 shadow-2xl bg-white/90 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl transition-all duration-300 hover:shadow-3xl hover:-translate-y-1">
       <CardHeader className="text-center pb-6">
         <div className="mx-auto w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
-          <Brain className="h-6 w-6 text-purple-600" />
+          <Brain className="h-6 w-6 text-purple-600 drop-shadow-md" />
         </div>
-        <CardTitle className="text-2xl">How do you learn best?</CardTitle>
+        <CardTitle className="text-2xl font-extrabold">How do you learn best?</CardTitle>
         <CardDescription className="text-base">
           Select all learning styles that apply to you
         </CardDescription>
@@ -344,8 +344,8 @@ function LearningStyleStep({
                 key={style.id}
                 className={`p-4 border-2 rounded-xl cursor-pointer transition-all hover:shadow-md ${
                   formData.learningStyle?.includes(style.id)
-                    ? "border-indigo-500 bg-indigo-50"
-                    : "border-gray-200 hover:border-gray-300"
+                    ? "border-indigo-500 bg-indigo-50 dark:bg-indigo-900"
+                    : "border-gray-200 hover:border-gray-300 dark:hover:border-gray-700"
                 }`}
                 onClick={() => toggleLearningStyle(style.id)}
               >
@@ -374,8 +374,8 @@ function LearningStyleStep({
                 key={time.id}
                 className={`p-3 border-2 rounded-lg cursor-pointer transition-all ${
                   formData.preferredStudyTime?.includes(time.id)
-                    ? "border-purple-500 bg-purple-50"
-                    : "border-gray-200 hover:border-gray-300"
+                    ? "border-purple-500 bg-purple-50 dark:bg-purple-900"
+                    : "border-gray-200 hover:border-gray-300 dark:hover:border-gray-700"
                 }`}
                 onClick={() => toggleStudyTime(time.id)}
               >
@@ -481,12 +481,12 @@ function SubjectPreferencesStep({
   };
 
   return (
-    <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+    <Card className="border-0 shadow-2xl bg-white/90 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl transition-all duration-300 hover:shadow-3xl hover:-translate-y-1">
       <CardHeader className="text-center pb-6">
         <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
-          <Target className="h-6 w-6 text-green-600" />
+          <Target className="h-6 w-6 text-green-600 drop-shadow-md" />
         </div>
-        <CardTitle className="text-2xl">What subjects interest you?</CardTitle>
+        <CardTitle className="text-2xl font-extrabold">What subjects interest you?</CardTitle>
         <CardDescription className="text-base">
           Choose subjects and set your learning goals
         </CardDescription>
@@ -503,7 +503,7 @@ function SubjectPreferencesStep({
                     ? "default"
                     : "outline"
                 }
-                className="cursor-pointer px-3 py-1 hover:bg-indigo-100"
+                className="cursor-pointer px-3 py-1 rounded-full hover:scale-105 transition-transform dark:hover:bg-indigo-900 dark:hover:text-indigo-300"
                 onClick={() => {
                   if (formData.subjects?.find((s) => s.subject === subject)) {
                     removeSubject(subject);
@@ -525,7 +525,7 @@ function SubjectPreferencesStep({
               {formData.subjects.map((subject) => (
                 <div
                   key={subject.subject}
-                  className="p-4 border rounded-lg bg-gray-50"
+                  className="p-4 border rounded-lg bg-gray-50 dark:bg-gray-800"
                 >
                   <div className="flex items-center justify-between mb-4">
                     <h4 className="font-medium">{subject.subject}</h4>
@@ -533,7 +533,7 @@ function SubjectPreferencesStep({
                       variant="ghost"
                       size="sm"
                       onClick={() => removeSubject(subject.subject)}
-                      className="text-red-500 hover:text-red-700"
+                      className="text-red-500 hover:text-red-700 dark:hover:text-red-400 transition-colors"
                     >
                       Remove
                     </Button>
@@ -630,12 +630,12 @@ function ScheduleStep({
   };
 
   return (
-    <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+    <Card className="border-0 shadow-2xl bg-white/90 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl transition-all duration-300 hover:shadow-3xl hover:-translate-y-1">
       <CardHeader className="text-center pb-6">
         <div className="mx-auto w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mb-4">
-          <Clock className="h-6 w-6 text-orange-600" />
+          <Clock className="h-6 w-6 text-orange-600 drop-shadow-md" />
         </div>
-        <CardTitle className="text-2xl">Plan your study schedule</CardTitle>
+        <CardTitle className="text-2xl font-extrabold">Plan your study schedule</CardTitle>
         <CardDescription className="text-base">
           Help us create the perfect learning schedule for you
         </CardDescription>
@@ -701,8 +701,8 @@ function ScheduleStep({
                 key={day}
                 className={`p-3 border-2 rounded-lg cursor-pointer transition-all text-center ${
                   formData.studyDays?.includes(day)
-                    ? "border-indigo-500 bg-indigo-50"
-                    : "border-gray-200 hover:border-gray-300"
+                    ? "border-indigo-500 bg-indigo-50 dark:bg-indigo-900"
+                    : "border-gray-200 hover:border-gray-300 dark:hover:border-gray-700"
                 }`}
                 onClick={() => toggleStudyDay(day)}
               >
@@ -721,18 +721,18 @@ function ScheduleStep({
               updateFormData({ studyEnvironment: value })
             }
           >
-            <SelectTrigger className="h-12">
+            <SelectTrigger className="h-12 px-4 py-2 rounded-lg border border-indigo-200 dark:border-indigo-800 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-700 transition-all">
               <SelectValue placeholder="Select your preferred study environment" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="quiet-room">Quiet Room</SelectItem>
-              <SelectItem value="background-music">
+              <SelectItem value="quiet-room" className="hover:scale-105 transition-transform">Quiet Room</SelectItem>
+              <SelectItem value="background-music" className="hover:scale-105 transition-transform">
                 With Background Music
               </SelectItem>
-              <SelectItem value="library">Library Setting</SelectItem>
-              <SelectItem value="cafe">Cafe/Social Environment</SelectItem>
-              <SelectItem value="outdoors">Outdoors</SelectItem>
-              <SelectItem value="flexible">Flexible/Varies</SelectItem>
+              <SelectItem value="library" className="hover:scale-105 transition-transform">Library Setting</SelectItem>
+              <SelectItem value="cafe" className="hover:scale-105 transition-transform">Cafe/Social Environment</SelectItem>
+              <SelectItem value="outdoors" className="hover:scale-105 transition-transform">Outdoors</SelectItem>
+              <SelectItem value="flexible" className="hover:scale-105 transition-transform">Flexible/Varies</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -787,12 +787,12 @@ function LearningCharacteristicsStep({
   };
 
   return (
-    <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+    <Card className="border-0 shadow-2xl bg-white/90 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl transition-all duration-300 hover:shadow-3xl hover:-translate-y-1">
       <CardHeader className="text-center pb-6">
         <div className="mx-auto w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4">
-          <Settings className="h-6 w-6 text-red-600" />
+          <Settings className="h-6 w-6 text-red-600 drop-shadow-md" />
         </div>
-        <CardTitle className="text-2xl">Learning characteristics</CardTitle>
+        <CardTitle className="text-2xl font-extrabold">Learning characteristics</CardTitle>
         <CardDescription className="text-base">
           Help us understand your learning profile better
         </CardDescription>
@@ -811,8 +811,8 @@ function LearningCharacteristicsStep({
                 key={challenge}
                 className={`p-3 border-2 rounded-lg cursor-pointer transition-all ${
                   formData.learningChallenges?.includes(challenge)
-                    ? "border-red-500 bg-red-50"
-                    : "border-gray-200 hover:border-gray-300"
+                    ? "border-red-500 bg-red-50 dark:bg-red-900"
+                    : "border-gray-200 hover:border-gray-300 dark:hover:border-gray-700"
                 }`}
                 onClick={() => toggleChallenge(challenge)}
               >
@@ -837,8 +837,8 @@ function LearningCharacteristicsStep({
                 key={factor}
                 className={`p-3 border-2 rounded-lg cursor-pointer transition-all ${
                   formData.motivationFactors?.includes(factor)
-                    ? "border-green-500 bg-green-50"
-                    : "border-gray-200 hover:border-gray-300"
+                    ? "border-green-500 bg-green-50 dark:bg-green-900"
+                    : "border-gray-200 hover:border-gray-300 dark:hover:border-gray-700"
                 }`}
                 onClick={() => toggleMotivation(factor)}
               >
@@ -862,16 +862,16 @@ function LearningCharacteristicsStep({
                 updateFormData({ difficultyPreference: value })
               }
             >
-              <SelectTrigger className="h-12">
+              <SelectTrigger className="h-12 px-4 py-2 rounded-lg border border-indigo-200 dark:border-indigo-800 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-700 transition-all">
                 <SelectValue placeholder="Select difficulty preference" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="gradual">Gradual Progression</SelectItem>
-                <SelectItem value="challenging">
+                <SelectItem value="gradual" className="hover:scale-105 transition-transform">Gradual Progression</SelectItem>
+                <SelectItem value="challenging" className="hover:scale-105 transition-transform">
                   Challenging from Start
                 </SelectItem>
-                <SelectItem value="mixed">Mixed Difficulty</SelectItem>
-                <SelectItem value="adaptive">Fully Adaptive</SelectItem>
+                <SelectItem value="mixed" className="hover:scale-105 transition-transform">Mixed Difficulty</SelectItem>
+                <SelectItem value="adaptive" className="hover:scale-105 transition-transform">Fully Adaptive</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -884,14 +884,14 @@ function LearningCharacteristicsStep({
                 updateFormData({ feedbackPreference: value })
               }
             >
-              <SelectTrigger className="h-12">
+              <SelectTrigger className="h-12 px-4 py-2 rounded-lg border border-indigo-200 dark:border-indigo-800 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-700 transition-all">
                 <SelectValue placeholder="Select feedback preference" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="immediate">Immediate Feedback</SelectItem>
-                <SelectItem value="delayed">Delayed Feedback</SelectItem>
-                <SelectItem value="summary">Summary Feedback</SelectItem>
-                <SelectItem value="minimal">Minimal Feedback</SelectItem>
+                <SelectItem value="immediate" className="hover:scale-105 transition-transform">Immediate Feedback</SelectItem>
+                <SelectItem value="delayed" className="hover:scale-105 transition-transform">Delayed Feedback</SelectItem>
+                <SelectItem value="summary" className="hover:scale-105 transition-transform">Summary Feedback</SelectItem>
+                <SelectItem value="minimal" className="hover:scale-105 transition-transform">Minimal Feedback</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -928,12 +928,12 @@ function GoalsStep({
   };
 
   return (
-    <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+    <Card className="border-0 shadow-2xl bg-white/90 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl transition-all duration-300 hover:shadow-3xl hover:-translate-y-1">
       <CardHeader className="text-center pb-6">
         <div className="mx-auto w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
-          <Sparkles className="h-6 w-6 text-yellow-600" />
+          <Sparkles className="h-6 w-6 text-yellow-600 drop-shadow-md" />
         </div>
-        <CardTitle className="text-2xl">
+        <CardTitle className="text-2xl font-extrabold">
           What are your learning goals?
         </CardTitle>
         <CardDescription className="text-base">
@@ -949,8 +949,8 @@ function GoalsStep({
                 key={goal}
                 className={`p-3 border-2 rounded-lg cursor-pointer transition-all ${
                   formData.primaryGoals?.includes(goal)
-                    ? "border-yellow-500 bg-yellow-50"
-                    : "border-gray-200 hover:border-gray-300"
+                    ? "border-yellow-500 bg-yellow-50 dark:bg-yellow-900"
+                    : "border-gray-200 hover:border-gray-300 dark:hover:border-gray-700"
                 }`}
                 onClick={() => togglePrimaryGoal(goal)}
               >
@@ -978,7 +978,7 @@ function GoalsStep({
                   .filter((g) => g.trim()),
               })
             }
-            className="min-h-[100px]"
+            className="min-h-[100px] px-4 py-3 rounded-lg border border-indigo-200 dark:border-indigo-800 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-700 transition-all"
           />
         </div>
 
@@ -997,7 +997,7 @@ function GoalsStep({
                   .filter((g) => g.trim()),
               })
             }
-            className="min-h-[100px]"
+            className="min-h-[100px] px-4 py-3 rounded-lg border border-indigo-200 dark:border-indigo-800 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-700 transition-all"
           />
         </div>
 
@@ -1012,7 +1012,7 @@ function GoalsStep({
             onChange={(e) =>
               updateFormData({ targetCompletionDate: e.target.value })
             }
-            className="h-12"
+            className="h-12 px-4 py-2 rounded-lg border border-indigo-200 dark:border-indigo-800 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-700 transition-all"
           />
         </div>
       </CardContent>
@@ -1022,12 +1022,12 @@ function GoalsStep({
 
 function ReviewStep({ formData }: { formData: Partial<UserProfile> }) {
   return (
-    <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+    <Card className="border-0 shadow-2xl bg-white/90 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl transition-all duration-300 hover:shadow-3xl hover:-translate-y-1">
       <CardHeader className="text-center pb-6">
         <div className="mx-auto w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center mb-4">
-          <Sparkles className="h-6 w-6 text-white" />
+          <Sparkles className="h-6 w-6 text-white drop-shadow-lg" />
         </div>
-        <CardTitle className="text-2xl">Review your profile</CardTitle>
+        <CardTitle className="text-2xl font-extrabold">Review your profile</CardTitle>
         <CardDescription className="text-base">
           Make sure everything looks correct before we create your personalized
           learning experience
@@ -1036,19 +1036,19 @@ function ReviewStep({ formData }: { formData: Partial<UserProfile> }) {
       <CardContent className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
-            <div className="p-4 bg-blue-50 rounded-lg">
-              <h3 className="font-semibold text-blue-900 mb-2">
+            <div className="p-4 bg-blue-50 rounded-lg dark:bg-blue-900">
+              <h3 className="font-semibold text-blue-900 dark:text-blue-300 mb-2">
                 Personal Info
               </h3>
-              <p className="text-sm text-blue-800">Name: {formData.name}</p>
-              <p className="text-sm text-blue-800">Age: {formData.age}</p>
-              <p className="text-sm text-blue-800">
+              <p className="text-sm text-blue-800 dark:text-blue-200">Name: {formData.name}</p>
+              <p className="text-sm text-blue-800 dark:text-blue-200">Age: {formData.age}</p>
+              <p className="text-sm text-blue-800 dark:text-blue-200">
                 Grade: {formData.gradeLevel}
               </p>
             </div>
 
-            <div className="p-4 bg-purple-50 rounded-lg">
-              <h3 className="font-semibold text-purple-900 mb-2">
+            <div className="p-4 bg-purple-50 rounded-lg dark:bg-purple-900">
+              <h3 className="font-semibold text-purple-900 dark:text-purple-300 mb-2">
                 Learning Style
               </h3>
               <div className="flex flex-wrap gap-1">
@@ -1056,7 +1056,7 @@ function ReviewStep({ formData }: { formData: Partial<UserProfile> }) {
                   <Badge
                     key={style}
                     variant="secondary"
-                    className="text-xs bg-purple-200 text-purple-800"
+                    className="text-xs bg-purple-200 text-purple-800 dark:bg-purple-800 dark:text-purple-200"
                   >
                     {style}
                   </Badge>
@@ -1064,23 +1064,23 @@ function ReviewStep({ formData }: { formData: Partial<UserProfile> }) {
               </div>
             </div>
 
-            <div className="p-4 bg-green-50 rounded-lg">
-              <h3 className="font-semibold text-green-900 mb-2">Schedule</h3>
-              <p className="text-sm text-green-800">
+            <div className="p-4 bg-green-50 rounded-lg dark:bg-green-900">
+              <h3 className="font-semibold text-green-900 dark:text-green-300 mb-2">Schedule</h3>
+              <p className="text-sm text-green-800 dark:text-green-200">
                 {formData.availableHours}h/week
               </p>
-              <p className="text-sm text-green-800">
+              <p className="text-sm text-green-800 dark:text-green-200">
                 {formData.preferredSessionLength} min sessions
               </p>
-              <p className="text-sm text-green-800">
+              <p className="text-sm text-green-800 dark:text-green-200">
                 {formData.studyDays?.length} study days
               </p>
             </div>
           </div>
 
           <div className="space-y-4">
-            <div className="p-4 bg-orange-50 rounded-lg">
-              <h3 className="font-semibold text-orange-900 mb-2">
+            <div className="p-4 bg-orange-50 rounded-lg dark:bg-orange-900">
+              <h3 className="font-semibold text-orange-900 dark:text-orange-300 mb-2">
                 Subjects ({formData.subjects?.length})
               </h3>
               <div className="flex flex-wrap gap-1">
@@ -1088,7 +1088,7 @@ function ReviewStep({ formData }: { formData: Partial<UserProfile> }) {
                   <Badge
                     key={subject.subject}
                     variant="secondary"
-                    className="text-xs bg-orange-200 text-orange-800"
+                    className="text-xs bg-orange-200 text-orange-800 dark:bg-orange-800 dark:text-orange-200"
                   >
                     {subject.subject}
                   </Badge>
@@ -1096,14 +1096,14 @@ function ReviewStep({ formData }: { formData: Partial<UserProfile> }) {
               </div>
             </div>
 
-            <div className="p-4 bg-yellow-50 rounded-lg">
-              <h3 className="font-semibold text-yellow-900 mb-2">Goals</h3>
+            <div className="p-4 bg-yellow-50 rounded-lg dark:bg-yellow-900">
+              <h3 className="font-semibold text-yellow-900 dark:text-yellow-300 mb-2">Goals</h3>
               <div className="flex flex-wrap gap-1">
                 {formData.primaryGoals?.map((goal) => (
                   <Badge
                     key={goal}
                     variant="secondary"
-                    className="text-xs bg-yellow-200 text-yellow-800"
+                    className="text-xs bg-yellow-200 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-200"
                   >
                     {goal}
                   </Badge>
@@ -1111,15 +1111,15 @@ function ReviewStep({ formData }: { formData: Partial<UserProfile> }) {
               </div>
             </div>
 
-            <div className="p-4 bg-red-50 rounded-lg">
-              <h3 className="font-semibold text-red-900 mb-2">Preferences</h3>
-              <p className="text-sm text-red-800">
+            <div className="p-4 bg-red-50 rounded-lg dark:bg-red-900">
+              <h3 className="font-semibold text-red-900 dark:text-red-300 mb-2">Preferences</h3>
+              <p className="text-sm text-red-800 dark:text-red-200">
                 Difficulty: {formData.difficultyPreference}
               </p>
-              <p className="text-sm text-red-800">
+              <p className="text-sm text-red-800 dark:text-red-200">
                 Feedback: {formData.feedbackPreference}
               </p>
-              <p className="text-sm text-red-800">
+              <p className="text-sm text-red-800 dark:text-red-200">
                 Environment: {formData.studyEnvironment}
               </p>
             </div>
