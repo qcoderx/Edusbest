@@ -74,7 +74,7 @@ export function ContentLibrary() {
                         {organizedContent[subject].map((content) => (
                           <AccordionItem value={content.id} key={content.id}>
                             <AccordionTrigger>{content.topic}</AccordionTrigger>
-                            <AccordionContent className="p-4 bg-gray-50 rounded-md space-y-3">
+                            <AccordionContent className="p-4 bg-white/80 dark:bg-gray-800/80 rounded-md space-y-3">
                               <p className="font-semibold">Explanation:</p>
                               <p className="text-sm whitespace-pre-wrap">
                                 {content.body.explanation}
@@ -109,7 +109,7 @@ export function ContentLibrary() {
                                 Score: {quiz.score}%
                               </Badge>
                             </AccordionTrigger>
-                            <AccordionContent className="p-4 bg-gray-50 rounded-md space-y-3">
+                            <AccordionContent className="p-4 bg-white/80 dark:bg-gray-800/80 rounded-md space-y-3">
                               {quiz.questions.map((q, i) => (
                                 <div key={i} className="pb-2 border-b">
                                   <p className="font-medium">{q.question}</p>
