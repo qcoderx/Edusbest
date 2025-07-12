@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { 
@@ -16,18 +17,21 @@ import {
   Play,
   Mail,
   Phone,
-  MapPin
+  MapPin,
+  Sun,
+  Moon
 } from "lucide-react";
 import { OnboardingFlow } from "@/components/onboarding-flow";
 import type { UserProfile } from "@/types/user-profile";
 import { useData } from "@/context/DataContext";
+import { useTheme } from "@/context/ThemeContext";
 import type { StudentData } from "@/types/learning-data";
 
 export default function HomePage() {
   const { studentData, updateStudentData, resetStudentData } = useData();
+  const { theme, toggleTheme } = useTheme();
   const [isOnboarding, setIsOnboarding] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
-  const [activeSection, setActiveSection] = useState("home");
 
   // This effect runs only once on the client after the component mounts.
   useEffect(() => {
@@ -67,8 +71,8 @@ export default function HomePage() {
   // Render a loading state or null until the component has mounted on the client
   if (!hasMounted) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin" />
+      <div className="flex items-center justify-center min-h-screen bg-white dark:bg-gray-900">
+        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
       </div>
     );
   }
@@ -80,28 +84,41 @@ export default function HomePage() {
 
   // Render main landing page
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-white/90 backdrop-blur-md border-b border-gray-100 z-50">
+      <nav className="fixed top-0 w-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 z-50 transition-colors duration-200">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-8">
-              <Link href="/" className="text-2xl font-bold text-blue-600">
-                EdusBest
+              <Link href="/" className="flex items-center space-x-2">
+                <Image src="/curio-logo.svg" alt="Curio Logo" width={32} height={32} />
+                <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">Curio</span>
               </Link>
               <div className="hidden md:flex space-x-8">
-                <Link href="/" className="text-sm font-medium text-blue-600">
+                <Link href="/" className="text-sm font-medium text-blue-600 dark:text-blue-400">
                   Home
                 </Link>
-                <Link href="/about" className="text-sm font-medium text-gray-600 hover:text-blue-600">
+                <Link href="/about" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                   About
                 </Link>
-                <Link href="/contact" className="text-sm font-medium text-gray-600 hover:text-blue-600">
+                <Link href="/contact" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                   Contact
                 </Link>
               </div>
             </div>
             <div className="flex items-center space-x-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={toggleTheme}
+                className="p-2"
+              >
+                {theme === 'light' ? (
+                  <Moon className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+                ) : (
+                  <Sun className="h-5 w-5 text-gray-300" />
+                )}
+              </Button>
               <Link href="/student">
                 <Button className="bg-blue-600 hover:bg-blue-700 text-white">
                   Get Started
@@ -114,22 +131,22 @@ export default function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-24 pb-16 bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+      <section className="pt-24 pb-16 bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-200">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium mb-8">
+            <div className="inline-flex items-center px-4 py-2 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium mb-8">
               <Star className="h-4 w-4 mr-2" />
-              #1 AI-Powered Learning Platform
+              #1 AI-Powered Learning Content Curation
             </div>
-            <h1 className="text-6xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-              Transform Your
-              <span className="text-blue-600"> Learning</span>
+            <h1 className="text-6xl md:text-7xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
+              Discover Your
+              <span className="text-blue-600 dark:text-blue-400"> Learning</span>
               <br />
-              Experience
+              Journey
             </h1>
-            <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Personalized AI-driven education that adapts to your learning style, 
-              pace, and goals. Join thousands of students achieving their dreams.
+            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+              Personalized AI-driven content curation that adapts to your learning style, 
+              interests, and goals. Join thousands of learners discovering their path.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
               <Link href="/student">
@@ -138,12 +155,12 @@ export default function HomePage() {
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
-              <Button size="lg" variant="outline" className="px-8 py-4 text-lg">
+              <Button size="lg" variant="outline" className="px-8 py-4 text-lg border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300">
                 <Play className="mr-2 h-5 w-5" />
                 Watch Demo
               </Button>
             </div>
-            <div className="flex items-center justify-center space-x-8 text-sm text-gray-500">
+            <div className="flex items-center justify-center space-x-8 text-sm text-gray-500 dark:text-gray-400">
               <div className="flex items-center">
                 <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
                 No credit card required
@@ -162,56 +179,56 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white dark:bg-gray-900 transition-colors duration-200">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Why Choose EdusBest?
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              Why Choose Curio?
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Our AI-powered platform delivers personalized learning experiences 
-              that adapt to each student's unique needs and learning style.
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+              Our AI-powered platform delivers personalized content curation 
+              that adapts to each learner's unique needs and interests.
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center p-6 rounded-xl hover:shadow-lg transition-shadow">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Brain className="h-8 w-8 text-blue-600" />
+            <div className="text-center p-6 rounded-xl hover:shadow-lg transition-shadow bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
+              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Brain className="h-8 w-8 text-blue-600 dark:text-blue-400" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">AI Adaptation</h3>
-              <p className="text-gray-600">
-                Machine learning algorithms analyze your performance to create 
-                personalized learning paths that evolve with you.
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">AI Curation</h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                Machine learning algorithms analyze your interests to curate 
+                personalized learning content that evolves with you.
               </p>
             </div>
-            <div className="text-center p-6 rounded-xl hover:shadow-lg transition-shadow">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <TrendingUp className="h-8 w-8 text-green-600" />
+            <div className="text-center p-6 rounded-xl hover:shadow-lg transition-shadow bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
+              <div className="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                <TrendingUp className="h-8 w-8 text-green-600 dark:text-green-400" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Progress Tracking</h3>
-              <p className="text-gray-600">
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Progress Tracking</h3>
+              <p className="text-gray-600 dark:text-gray-300">
                 Real-time analytics track your learning progress and identify 
                 areas that need attention with detailed insights.
               </p>
             </div>
-            <div className="text-center p-6 rounded-xl hover:shadow-lg transition-shadow">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <BookOpen className="h-8 w-8 text-purple-600" />
+            <div className="text-center p-6 rounded-xl hover:shadow-lg transition-shadow bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
+              <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                <BookOpen className="h-8 w-8 text-purple-600 dark:text-purple-400" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Adaptive Content</h3>
-              <p className="text-gray-600">
-                Dynamic content generation based on your learning preferences 
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Content Discovery</h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                Discover new topics and content based on your learning preferences 
                 and knowledge gaps for optimal retention.
               </p>
             </div>
-            <div className="text-center p-6 rounded-xl hover:shadow-lg transition-shadow">
-              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="h-8 w-8 text-orange-600" />
+            <div className="text-center p-6 rounded-xl hover:shadow-lg transition-shadow bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
+              <div className="w-16 h-16 bg-orange-100 dark:bg-orange-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Users className="h-8 w-8 text-orange-600 dark:text-orange-400" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Inclusive Access</h3>
-              <p className="text-gray-600">
-                Designed to bridge educational gaps in underserved communities 
-                worldwide with accessible, quality education.
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Community Learning</h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                Connect with fellow learners, share insights, and collaborate 
+                on your learning journey.
               </p>
             </div>
           </div>
@@ -219,33 +236,33 @@ export default function HomePage() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-50 dark:bg-gray-800 transition-colors duration-200">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8 text-center">
-            <div className="bg-white p-8 rounded-xl shadow-sm">
-              <div className="text-5xl font-bold text-blue-600 mb-2">85%</div>
-              <div className="text-gray-600 text-lg">Improvement in Learning Outcomes</div>
+            <div className="bg-white dark:bg-gray-900 p-8 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+              <div className="text-5xl font-bold text-blue-600 dark:text-blue-400 mb-2">85%</div>
+              <div className="text-gray-600 dark:text-gray-300 text-lg">Improvement in Learning Outcomes</div>
             </div>
-            <div className="bg-white p-8 rounded-xl shadow-sm">
-              <div className="text-5xl font-bold text-green-600 mb-2">60%</div>
-              <div className="text-gray-600 text-lg">Reduction in Learning Time</div>
+            <div className="bg-white dark:bg-gray-900 p-8 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+              <div className="text-5xl font-bold text-green-600 dark:text-green-400 mb-2">60%</div>
+              <div className="text-gray-600 dark:text-gray-300 text-lg">Reduction in Learning Time</div>
             </div>
-            <div className="bg-white p-8 rounded-xl shadow-sm">
-              <div className="text-5xl font-bold text-purple-600 mb-2">10K+</div>
-              <div className="text-gray-600 text-lg">Students Served Worldwide</div>
+            <div className="bg-white dark:bg-gray-900 p-8 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+              <div className="text-5xl font-bold text-purple-600 dark:text-purple-400 mb-2">10K+</div>
+              <div className="text-gray-600 dark:text-gray-300 text-lg">Learners Worldwide</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-blue-600">
+      <section className="py-20 bg-blue-600 dark:bg-blue-700 transition-colors duration-200">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold text-white mb-4">
-            Ready to Transform Your Learning?
+            Ready to Discover Your Learning Path?
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Join thousands of students who are already experiencing the future of education.
+            Join thousands of learners who are already experiencing the future of content curation.
             Start your personalized learning journey today.
           </p>
           <Link href="/student">
@@ -258,13 +275,16 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
+      <footer className="bg-gray-900 dark:bg-black text-white py-12 transition-colors duration-200">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-2xl font-bold text-blue-400 mb-4">EdusBest</h3>
+              <div className="flex items-center space-x-2 mb-4">
+                <Image src="/curio-logo.svg" alt="Curio Logo" width={24} height={24} />
+                <h3 className="text-2xl font-bold text-blue-400">Curio</h3>
+              </div>
               <p className="text-gray-400">
-                Transforming education through AI-powered personalized learning experiences.
+                Transforming learning through AI-powered content curation experiences.
               </p>
             </div>
             <div>
@@ -301,7 +321,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 EdusBest. All rights reserved.</p>
+            <p>&copy; 2024 Curio. All rights reserved.</p>
           </div>
         </div>
       </footer>

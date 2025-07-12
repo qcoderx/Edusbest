@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { DataProvider } from "@/context/DataContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 import { Toaster } from "@/components/ui/toaster";
 import { Suspense } from "react";
 import { Loader2 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "EdusBest",
-  description: "Created by Lasisi Quadri",
-  generator: "Me",
+  title: "Curio - AI-Powered Learning Content Curation",
+  description: "Personalized learning content curation powered by AI. Discover, learn, and grow with Curio.",
+  generator: "Curio Team",
 };
 
 export default function RootLayout({
@@ -24,10 +25,12 @@ export default function RootLayout({
             <Loader2 className="h-8 w-8 animate-spin" />
           </div>
         }>
-          <DataProvider>
-            {children}
-            <Toaster />
-          </DataProvider>
+          <ThemeProvider>
+            <DataProvider>
+              {children}
+              <Toaster />
+            </DataProvider>
+          </ThemeProvider>
         </Suspense>
       </body>
     </html>
