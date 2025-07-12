@@ -23,27 +23,17 @@ import { OnboardingFlow } from "@/components/onboarding-flow";
 import type { UserProfile } from "@/types/user-profile";
 import { useData } from "@/context/DataContext";
 import type { StudentData } from "@/types/learning-data";
+import { StudentDashboard } from "@/components/student-dashboard";
 
 export default function HomePage() {
   const { studentData, updateStudentData, resetStudentData } = useData();
-  const [isOnboarding, setIsOnboarding] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
 
   // This effect runs only once on the client after the component mounts.
   useEffect(() => {
     setHasMounted(true);
   }, []);
-
-  // This effect determines whether to show the onboarding flow based on studentData.
-  useEffect(() => {
-    if (hasMounted) {
-      if (!studentData) {
-        setIsOnboarding(true);
-      } else {
-        setIsOnboarding(false);
-      }
-    }
-  }, [studentData, hasMounted]);
 
   // Handler for when onboarding is completed
   const handleOnboardingComplete = (profile: UserProfile) => {
@@ -55,13 +45,18 @@ export default function HomePage() {
       stats: { streakDays: 0, totalPoints: 0 },
     };
     updateStudentData(initialData);
-    setIsOnboarding(false);
+    setShowOnboarding(false);
   };
 
   // Handler to reset profile and re-start onboarding
   const handleResetProfile = () => {
     resetStudentData();
-    setIsOnboarding(true);
+    setShowOnboarding(true);
+  };
+
+  // Handler to start onboarding when user clicks "Get Started"
+  const handleStartOnboarding = () => {
+    setShowOnboarding(true);
   };
 
   // Render a loading state or null until the component has mounted on the client
@@ -73,8 +68,8 @@ export default function HomePage() {
     );
   }
 
-  // Render onboarding flow if needed
-  if (isOnboarding || !studentData) {
+  // Render onboarding flow if user chooses to start
+  if (showOnboarding) {
     return <OnboardingFlow onComplete={handleOnboardingComplete} />;
   }
 
@@ -103,12 +98,13 @@ export default function HomePage() {
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <Link href="/student">
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6 py-2 text-sm font-semibold transition-all duration-200 hover:scale-105 shadow-lg">
+              <Button 
+                onClick={handleStartOnboarding}
+                className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6 py-2 text-sm font-semibold transition-all duration-200 hover:scale-105 shadow-lg"
+              >
                   Get Started
                   <ChevronRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
+              </Button>
             </div>
           </div>
         </div>
@@ -133,12 +129,14 @@ export default function HomePage() {
               interests, and goals. Join thousands of learners discovering their path.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-              <Link href="/student">
-                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg">
+              <Button 
+                size="lg" 
+                onClick={handleStartOnboarding}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg"
+              >
                   Start Learning Free
                   <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
+              </Button>
               <Button size="lg" variant="outline" className="px-8 py-4 text-lg border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300">
                 <Play className="mr-2 h-5 w-5" />
                 Watch Demo
@@ -249,12 +247,14 @@ export default function HomePage() {
             Join thousands of learners who are already experiencing the future of content curation.
             Start your personalized learning journey today.
           </p>
-          <Link href="/student">
-            <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg">
+          <Button 
+            size="lg" 
+            onClick={handleStartOnboarding}
+            className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg"
+          >
               Get Started Now
               <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </Link>
+          </Button>
         </div>
       </section>
 
