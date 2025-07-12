@@ -25,13 +25,10 @@ import { PersonalizedContent } from "./personalized-content";
 import { ProgressAnalytics } from "./progress-analytics";
 import { ContentLibrary } from "./content-library";
 import { useData } from "@/context/DataContext";
-import { useTheme } from "@/context/ThemeContext";
 import Link from "next/link";
-import { Sun, Moon } from "lucide-react";
 
 export function StudentDashboard() {
   const { studentData } = useData();
-  const { theme, toggleTheme } = useTheme();
 
   // This state is crucial. It holds the subject the user has selected.
   const [selectedSubject, setSelectedSubject] = useState(
@@ -67,23 +64,6 @@ export function StudentDashboard() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-white to-purple-100 dark:from-gray-900 dark:via-gray-950 dark:to-indigo-900 transition-colors duration-500 animate-gradient-move p-6">
       <div className="max-w-7xl mx-auto w-full animate-fade-in">
-        {/* Header with Theme Toggle */}
-        <div className="flex justify-between items-center mb-8">
-          <div></div> {/* Spacer */}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={toggleTheme}
-            className="p-3 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-200 hover:scale-105"
-          >
-            {theme === 'light' ? (
-              <Moon className="h-5 w-5 text-gray-600 dark:text-gray-300 drop-shadow-md" />
-            ) : (
-              <Sun className="h-5 w-5 text-yellow-400 drop-shadow-md" />
-            )}
-          </Button>
-        </div>
-
         <div className="mb-10 text-center">
           <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent mb-2 tracking-tight animate-fade-in">
             Welcome back, {profile.name}!

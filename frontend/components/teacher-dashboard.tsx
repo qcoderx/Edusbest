@@ -2,13 +2,10 @@
 
 import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Users, TrendingUp, AlertTriangle, BookOpen, Brain, Target } from "lucide-react"
-import { useTheme } from "@/context/ThemeContext"
-import { Sun, Moon } from "lucide-react"
 
 const classData = {
   totalStudents: 28,
@@ -69,7 +66,6 @@ const aiInsights = [
 
 export function TeacherDashboard() {
   const [selectedStudent, setSelectedStudent] = useState<any>(null)
-  const { theme, toggleTheme } = useTheme()
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -100,23 +96,6 @@ export function TeacherDashboard() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-white to-purple-100 dark:from-gray-900 dark:via-gray-950 dark:to-indigo-900 transition-colors duration-500 animate-gradient-move p-6">
       <div className="max-w-7xl mx-auto w-full animate-fade-in">
-        {/* Header with Theme Toggle */}
-        <div className="flex justify-between items-center mb-8">
-          <div></div> {/* Spacer */}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={toggleTheme}
-            className="p-3 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-200 hover:scale-105"
-          >
-            {theme === 'light' ? (
-              <Moon className="h-5 w-5 text-gray-600 dark:text-gray-300 drop-shadow-md" />
-            ) : (
-              <Sun className="h-5 w-5 text-yellow-400 drop-shadow-md" />
-            )}
-          </Button>
-        </div>
-
         {/* Header */}
         <div className="mb-10 text-center">
           <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent mb-2 tracking-tight animate-fade-in">

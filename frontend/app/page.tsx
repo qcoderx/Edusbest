@@ -17,19 +17,15 @@ import {
   Play,
   Mail,
   Phone,
-  MapPin,
-  Sun,
-  Moon
+  MapPin
 } from "lucide-react";
 import { OnboardingFlow } from "@/components/onboarding-flow";
 import type { UserProfile } from "@/types/user-profile";
 import { useData } from "@/context/DataContext";
-import { useTheme } from "@/context/ThemeContext";
 import type { StudentData } from "@/types/learning-data";
 
 export default function HomePage() {
   const { studentData, updateStudentData, resetStudentData } = useData();
-  const { theme, toggleTheme } = useTheme();
   const [isOnboarding, setIsOnboarding] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
 
@@ -107,18 +103,6 @@ export default function HomePage() {
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={toggleTheme}
-                className="p-3 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-200 hover:scale-105"
-              >
-                {theme === 'light' ? (
-                  <Moon className="h-5 w-5 text-gray-600 dark:text-gray-300 drop-shadow-md" />
-                ) : (
-                  <Sun className="h-5 w-5 text-yellow-400 drop-shadow-md" />
-                )}
-              </Button>
               <Link href="/student">
                 <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6 py-2 text-sm font-semibold transition-all duration-200 hover:scale-105 shadow-lg">
                   Get Started

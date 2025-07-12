@@ -3,6 +3,7 @@ import "./globals.css";
 import { DataProvider } from "@/context/DataContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { Toaster } from "@/components/ui/toaster";
+import { Header } from "@/components/Header";
 import { Suspense } from "react";
 import { Loader2 } from "lucide-react";
 
@@ -27,6 +28,7 @@ export default function RootLayout({
         }>
           <ThemeProvider>
             <DataProvider>
+              <Header />
               {children}
               <Toaster />
             </DataProvider>
