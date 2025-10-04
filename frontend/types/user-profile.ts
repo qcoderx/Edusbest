@@ -1,47 +1,48 @@
 export interface UserProfile {
   // Personal Information
-  name: string
-  age: number
-  gradeLevel: string
-  educationBackground: string
+  name: string;
+  age: number;
+  gradeLevel: string;
+  educationBackground: string;
+  examType: string; // New field for the selected exam
 
   // Learning Preferences
-  learningStyle: string[]
-  preferredStudyTime: string[]
-  studyEnvironment: string
-  attentionSpan: number
+  learningStyle: string[];
+  preferredStudyTime: string[];
+  studyEnvironment: string;
+  attentionSpan: number;
 
   // Subject Preferences
-  subjects: SubjectPreference[]
-  primaryGoals: string[]
+  subjects: SubjectPreference[];
+  primaryGoals: string[];
 
   // Schedule & Availability
-  availableHours: number
-  preferredSessionLength: number
-  studyDays: string[]
-  timeZone: string
+  availableHours: number;
+  preferredSessionLength: number;
+  studyDays: string[];
+  timeZone: string;
 
   // Learning Characteristics
-  currentSkillLevels: Record<string, number>
-  learningChallenges: string[]
-  motivationFactors: string[]
-  difficultyPreference: string
+  currentSkillLevels: Record<string, number>;
+  learningChallenges: string[];
+  motivationFactors: string[];
+  difficultyPreference: string;
 
   // Adaptive Parameters
-  adaptiveSpeed: string
-  feedbackPreference: string
-  assessmentFrequency: string
+  adaptiveSpeed: string;
+  feedbackPreference: string;
+  assessmentFrequency: string;
 
   // Goals & Objectives
-  shortTermGoals: string[]
-  longTermGoals: string[]
-  targetCompletionDate?: string
+  shortTermGoals: string[];
+  longTermGoals: string[];
+  targetCompletionDate?: string;
 }
 
 export interface SubjectPreference {
-  subject: string
-  priority: number
-  currentLevel: number
-  targetLevel: number
-  weeklyHours: number
+  subject: string;
+  priority: number;
+  currentLevel: number;
+  targetLevel: number;
+  weeklyHours: number;
 }
