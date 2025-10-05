@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     `;
 
     const result = await generateText({
-      model: google("gemini-1.5-flash"),
+      model: google("gemini-2.5-flash"),
       prompt,
       system:
         "You are an expert AI curriculum designer. Create a detailed, personalized, and structured learning path in a valid JSON format.",

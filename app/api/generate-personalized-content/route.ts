@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
     let text: string | null = null;
     try {
       const result = await generateText({
-        model: google("gemini-1.5-flash"),
+        model: google("gemini-2.5-flash"),
         prompt,
         system:
           "You are an expert educational content creator. Always respond with a single, valid JSON object containing detailed, factual, and personalized learning content based on the user's profile.",

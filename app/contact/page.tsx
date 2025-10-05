@@ -3,11 +3,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Clock, 
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Clock,
   Send,
   ArrowRight,
   MessageSquare,
@@ -17,7 +17,7 @@ import {
   Twitter,
   Sun,
   Moon,
-  Brain
+  Brain,
 } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
 
@@ -32,17 +32,33 @@ export default function ContactPage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-8">
               <Link href="/" className="flex items-center space-x-2">
-                <Image src="/curio-logo.svg" alt="Curio Logo" width={32} height={32} />
-                <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">Curio</span>
+                <Image
+                  src="/placeholder-logo.svg"
+                  alt="Edusbest Logo"
+                  width={32}
+                  height={32}
+                />
+                <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                  Edusbest
+                </span>
               </Link>
               <div className="hidden md:flex space-x-8">
-                <Link href="/" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
+                <Link
+                  href="/"
+                  className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+                >
                   Home
                 </Link>
-                <Link href="/about" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
+                <Link
+                  href="/about"
+                  className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+                >
                   About
                 </Link>
-                <Link href="/contact" className="text-sm font-medium text-blue-600 dark:text-blue-400">
+                <Link
+                  href="/contact"
+                  className="text-sm font-medium text-blue-600 dark:text-blue-400"
+                >
                   Contact
                 </Link>
               </div>
@@ -54,7 +70,7 @@ export default function ContactPage() {
                 onClick={toggleTheme}
                 className="p-2"
               >
-                {theme === 'light' ? (
+                {theme === "light" ? (
                   <Moon className="h-5 w-5 text-gray-600 dark:text-gray-300" />
                 ) : (
                   <Sun className="h-5 w-5 text-gray-300" />
@@ -75,11 +91,12 @@ export default function ContactPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-              Get in <span className="text-blue-600 dark:text-blue-400">Touch</span>
+              Get in{" "}
+              <span className="text-blue-600 dark:text-blue-400">Touch</span>
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Have questions about Curio? Want to learn more about our AI-powered 
-              content curation platform? We'd love to hear from you!
+              Have questions about Edusbest? Want to learn more about our
+              AI-powered content curation platform? We'd love to hear from you!
             </p>
           </div>
         </div>
@@ -165,9 +182,15 @@ export default function ContactPage() {
                     <Mail className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">Email</h3>
-                    <p className="text-gray-600 dark:text-gray-300">hello@curio.com</p>
-                    <p className="text-gray-600 dark:text-gray-300">support@curio.com</p>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+                      Email
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-300">
+                      hello@edusbest.com
+                    </p>
+                    <p className="text-gray-600 dark:text-gray-300">
+                      support@edusbest.com
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
@@ -175,9 +198,15 @@ export default function ContactPage() {
                     <Phone className="h-5 w-5 text-green-600 dark:text-green-400" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">Phone</h3>
-                    <p className="text-gray-600 dark:text-gray-300">+234 801 234 5678</p>
-                    <p className="text-gray-600 dark:text-gray-300">Mon-Fri: 9AM-6PM WAT</p>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+                      Phone
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-300">
+                      +234 801 234 5678
+                    </p>
+                    <p className="text-gray-600 dark:text-gray-300">
+                      Mon-Fri: 9AM-6PM WAT
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
@@ -185,9 +214,15 @@ export default function ContactPage() {
                     <MapPin className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">Location</h3>
-                    <p className="text-gray-600 dark:text-gray-300">24 Glover Rd, Ikoyi</p>
-                    <p className="text-gray-600 dark:text-gray-300">Lagos 106104, Nigeria</p>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+                      Location
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-300">
+                      24 Glover Rd, Ikoyi
+                    </p>
+                    <p className="text-gray-600 dark:text-gray-300">
+                      Lagos 106104, Nigeria
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
@@ -195,9 +230,15 @@ export default function ContactPage() {
                     <Clock className="h-5 w-5 text-orange-600 dark:text-orange-400" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">Business Hours</h3>
-                    <p className="text-gray-600 dark:text-gray-300">Monday - Friday: 9:00 AM - 6:00 PM</p>
-                    <p className="text-gray-600 dark:text-gray-300">Saturday: 10:00 AM - 4:00 PM</p>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+                      Business Hours
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-300">
+                      Monday - Friday: 9:00 AM - 6:00 PM
+                    </p>
+                    <p className="text-gray-600 dark:text-gray-300">
+                      Saturday: 10:00 AM - 4:00 PM
+                    </p>
                   </div>
                 </div>
               </div>
@@ -214,8 +255,8 @@ export default function ContactPage() {
               Meet the Developers
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Curio was created by passionate developers dedicated to transforming 
-              learning through innovative technology solutions.
+              Edusbest was created by passionate developers dedicated to
+              transforming learning through innovative technology solutions.
             </p>
           </div>
           <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
@@ -226,26 +267,43 @@ export default function ContactPage() {
                   <MessageSquare className="h-8 w-8 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">Lasisi Quadri</h3>
-                  <p className="text-blue-600 dark:text-blue-400 font-semibold">Lead Developer & Founder</p>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
+                    Lasisi Quadri
+                  </h3>
+                  <p className="text-blue-600 dark:text-blue-400 font-semibold">
+                    Lead Developer & Founder
+                  </p>
                 </div>
               </div>
               <p className="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
-                A passionate full-stack developer with expertise in AI/ML, 
-                educational technology, and creating impactful digital solutions. 
-                Committed to making quality education accessible to everyone.
+                A passionate full-stack developer with expertise in AI/ML,
+                educational technology, and creating impactful digital
+                solutions. Committed to making quality education accessible to
+                everyone.
               </p>
               <div className="flex space-x-3">
-                <Link href="#" className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
+                <Link
+                  href="#"
+                  className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
+                >
                   <Linkedin className="h-5 w-5" />
                 </Link>
-                <Link href="#" className="text-gray-400 hover:text-gray-900 dark:hover:text-gray-300">
+                <Link
+                  href="#"
+                  className="text-gray-400 hover:text-gray-900 dark:hover:text-gray-300"
+                >
                   <Github className="h-5 w-5" />
                 </Link>
-                <Link href="#" className="text-gray-400 hover:text-blue-400 dark:hover:text-blue-400">
+                <Link
+                  href="#"
+                  className="text-gray-400 hover:text-blue-400 dark:hover:text-blue-400"
+                >
                   <Twitter className="h-5 w-5" />
                 </Link>
-                <Link href="#" className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
+                <Link
+                  href="#"
+                  className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
+                >
                   <Globe className="h-5 w-5" />
                 </Link>
               </div>
@@ -258,22 +316,40 @@ export default function ContactPage() {
                   <Brain className="h-8 w-8 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">Lawal Adam</h3>
-                  <p className="text-green-600 dark:text-green-400 font-semibold">Co-founder & Lead Data Engineer</p>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
+                    Lawal Adam
+                  </h3>
+                  <p className="text-green-600 dark:text-green-400 font-semibold">
+                    Co-founder & Lead Data Engineer
+                  </p>
                 </div>
               </div>
               <p className="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
-                A results-driven data engineer with a strong foundation in statistics, machine learning, and backend development. 
-                Adam brings hands-on experience from Microsoft ADC, AltSchool Africa, and multiple AI-for-social-impact projects.
+                A results-driven data engineer with a strong foundation in
+                statistics, machine learning, and backend development. Adam
+                brings hands-on experience from Microsoft ADC, AltSchool Africa,
+                and multiple AI-for-social-impact projects.
               </p>
               <div className="flex space-x-3">
-                <Link href="https://www.linkedin.com/in/adamlawal669/" target="_blank" className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
+                <Link
+                  href="https://www.linkedin.com/in/adamlawal669/"
+                  target="_blank"
+                  className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
+                >
                   <Linkedin className="h-5 w-5" />
                 </Link>
-                <Link href="https://github.com/adamlaw669" target="_blank" className="text-gray-400 hover:text-gray-900 dark:hover:text-gray-300">
+                <Link
+                  href="https://github.com/adamlaw669"
+                  target="_blank"
+                  className="text-gray-400 hover:text-gray-900 dark:hover:text-gray-300"
+                >
                   <Github className="h-5 w-5" />
                 </Link>
-                <Link href="https://x.com/Adam__Lawal" target="_blank" className="text-gray-400 hover:text-blue-400 dark:hover:text-blue-400">
+                <Link
+                  href="https://x.com/Adam__Lawal"
+                  target="_blank"
+                  className="text-gray-400 hover:text-blue-400 dark:hover:text-blue-400"
+                >
                   <Twitter className="h-5 w-5" />
                 </Link>
               </div>
@@ -290,7 +366,7 @@ export default function ContactPage() {
               Frequently Asked Questions
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Find answers to common questions about Curio and our platform.
+              Find answers to common questions about Edusbest and our platform.
             </p>
           </div>
           <div className="max-w-3xl mx-auto space-y-4">
@@ -299,16 +375,17 @@ export default function ContactPage() {
                 How does the AI-powered content curation work?
               </h3>
               <p className="text-gray-600 dark:text-gray-300">
-                Our AI analyzes your interests, learning patterns, and preferences to create 
-                personalized content recommendations that adapt to your pace and style.
+                Our AI analyzes your interests, learning patterns, and
+                preferences to create personalized content recommendations that
+                adapt to your pace and style.
               </p>
             </div>
             <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 border border-gray-100 dark:border-gray-700">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                Is Curio free to use?
+                Is Edusbest free to use?
               </h3>
               <p className="text-gray-600 dark:text-gray-300">
-                Yes! We offer a free forever plan with access to core features. 
+                Yes! We offer a free forever plan with access to core features.
                 Premium features are available for advanced users.
               </p>
             </div>
@@ -317,8 +394,9 @@ export default function ContactPage() {
                 What types of content are available?
               </h3>
               <p className="text-gray-600 dark:text-gray-300">
-                We curate a wide range of content including articles, videos, courses, 
-                podcasts, and more across various subjects and interests.
+                We curate a wide range of content including articles, videos,
+                courses, podcasts, and more across various subjects and
+                interests.
               </p>
             </div>
             <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 border border-gray-100 dark:border-gray-700">
@@ -326,7 +404,7 @@ export default function ContactPage() {
                 How can I get support?
               </h3>
               <p className="text-gray-600 dark:text-gray-300">
-                You can reach our support team via email, phone, or through the 
+                You can reach our support team via email, phone, or through the
                 contact form above. We typically respond within 24 hours.
               </p>
             </div>
@@ -341,11 +419,14 @@ export default function ContactPage() {
             Ready to Get Started?
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Join thousands of learners who are already experiencing the future of content curation 
-            with Curio's AI-powered platform.
+            Join thousands of learners who are already experiencing the future
+            of content curation with Edusbest's AI-powered platform.
           </p>
           <Link href="/student">
-            <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg">
+            <Button
+              size="lg"
+              className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg"
+            >
               Start Learning Now
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
@@ -354,4 +435,4 @@ export default function ContactPage() {
       </section>
     </div>
   );
-} 
+}

@@ -7,13 +7,13 @@ export async function GET() {
     console.log("Testing Google AI SDK...");
     console.log("API Key available:", !!process.env.GOOGLE_API_KEY);
     console.log("API Key length:", process.env.GOOGLE_API_KEY?.length);
-    
+
     const result = await generateText({
-      model: google("gemini-1.5-flash"),
+      model: google("gemini-2.5-flash"),
       prompt: "Say hello in one sentence.",
       system: "You are a helpful assistant.",
     });
-    
+
     return NextResponse.json({
       success: true,
       response: result.text,
@@ -28,4 +28,4 @@ export async function GET() {
       apiKeyAvailable: !!process.env.GOOGLE_API_KEY,
     });
   }
-} 
+}

@@ -67,7 +67,7 @@ Format the entire response as a single, valid JSON object with a "questions" arr
     let text: string | null = null;
     try {
       const result = await generateText({
-        model: google("gemini-1.5-flash"),
+        model: google("gemini-2.5-flash"),
         prompt,
         system:
           "You are an expert educational assessment creator. You will generate a quiz on a very specific topic provided by the user. You must adhere strictly to the topic. Always respond in a valid JSON format.",

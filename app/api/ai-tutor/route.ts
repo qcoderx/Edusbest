@@ -36,7 +36,7 @@ Keep the response engaging and appropriate for their learning level. If the user
     let text: string | null = null;
     try {
       const result = await generateText({
-        model: google("gemini-1.5-flash"),
+        model: google("gemini-2.5-flash"),
         prompt,
         system:
           "You are a patient, encouraging AI tutor who adapts teaching methods to each student's unique learning profile. You can share study materials, suggest videos, and provide study tips.",

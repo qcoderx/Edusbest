@@ -26,7 +26,7 @@ Format as JSON with keys: strengths, weaknesses, pace, recommendations, difficul
       // Call the Google Generative AI model using @ai-sdk/google
       // The API key is automatically picked up from the GOOGLE_API_KEY environment variable.
       const result = await generateText({
-        model: google("gemini-1.5-flash"), // API key is now picked from GOOGLE_API_KEY env var
+        model: google("gemini-2.5-flash"), // API key is now picked from GOOGLE_API_KEY env var
         prompt,
         system:
           "You are an AI learning analytics expert. Provide detailed, actionable insights based on student performance data. Always respond with valid JSON.",

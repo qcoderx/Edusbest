@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     `;
 
     const result = await generateText({
-      model: google("gemini-1.5-flash"),
+      model: google("gemini-2.5-flash"),
       prompt,
       system:
         "You are an expert WAEC tutor. You provide clear, step-by-step solutions to past questions in Markdown format.",

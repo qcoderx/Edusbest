@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
     try {
       // The AI SDK has built-in retries, but we add our own fallback for robustness
       const result = await generateText({
-        model: google("gemini-1.5-flash"),
+        model: google("gemini-2.5-flash"),
         prompt,
         system:
           "You are an expert AI academic advisor. You create practical, personalized study plans in a valid JSON format.",

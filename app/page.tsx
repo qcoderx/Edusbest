@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation"; // Import the router
+import { Button } from "../components/ui/button";
 import { useState, useEffect } from "react";
 import {
   BookOpen,
@@ -19,13 +20,14 @@ import {
   Phone,
   MapPin,
 } from "lucide-react";
-import { OnboardingFlow } from "@/components/onboarding-flow";
-import type { UserProfile } from "@/types/user-profile";
-import { useData } from "@/context/DataContext";
-import type { StudentData } from "@/types/learning-data";
-import { StudentDashboard } from "@/components/student-dashboard";
+import { OnboardingFlow } from "../components/onboarding-flow";
+import type { UserProfile } from "../types/user-profile";
+import { useData } from "../context/DataContext";
+import type { StudentData } from "../types/learning-data";
+import { StudentDashboard } from "../components/student-dashboard";
 
 export default function HomePage() {
+  const router = useRouter(); // Initialize the router
   const { studentData, updateStudentData, resetStudentData } = useData();
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
@@ -46,6 +48,7 @@ export default function HomePage() {
     };
     updateStudentData(initialData);
     setShowOnboarding(false);
+    router.push("/student"); // Redirect to the student dashboard
   };
 
   // Handler to reset profile and re-start onboarding
@@ -59,7 +62,7 @@ export default function HomePage() {
     setShowOnboarding(true);
   };
 
-  // Render a loading state or null until the component has mounted on the client
+  // Render a loading state until the component has mounted on the client
   if (!hasMounted) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-white dark:bg-gray-900">
@@ -68,12 +71,17 @@ export default function HomePage() {
     );
   }
 
+  // If a student profile already exists, show the dashboard directly
+  if (studentData) {
+    return <StudentDashboard />;
+  }
+
   // Render onboarding flow if user chooses to start
   if (showOnboarding) {
     return <OnboardingFlow onComplete={handleOnboardingComplete} />;
   }
 
-  // Render main landing page
+  // Render main landing page if no profile and not onboarding
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200">
       {/* Navigation */}
@@ -83,13 +91,13 @@ export default function HomePage() {
             <div className="flex items-center space-x-8">
               <Link href="/" className="flex items-center space-x-2">
                 <Image
-                  src="/lumina-logo.svg"
-                  alt="Lumina Logo"
+                  src="/placeholder-logo.svg"
+                  alt="Edusbest Logo"
                   width={32}
                   height={32}
                 />
                 <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                  Lumina
+                  Edusbest
                 </span>
               </Link>
               <div className="hidden md:flex space-x-8">
@@ -142,7 +150,7 @@ export default function HomePage() {
               </span>
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Lumina is your personal AI tutor for WAEC success. Get
+              Edusbest is your personal AI tutor for WAEC success. Get
               step-by-step explanations, personalized quizzes, and progress
               tracking to ace your exams.
             </p>
@@ -183,7 +191,7 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              Why Choose Lumina?
+              Why Choose Edusbest?
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               Our AI-powered platform delivers personalized content that adapts
@@ -251,7 +259,8 @@ export default function HomePage() {
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
             Join thousands of students who are already transforming their
-            studies with Lumina. Start your personalized learning journey today.
+            studies with Edusbest. Start your personalized learning journey
+            today.
           </p>
           <Button
             size="lg"
@@ -271,12 +280,12 @@ export default function HomePage() {
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <Image
-                  src="/lumina-logo.svg"
-                  alt="Lumina Logo"
+                  src="/placeholder-logo.svg"
+                  alt="Edusbest Logo"
                   width={24}
                   height={24}
                 />
-                <h3 className="text-2xl font-bold text-blue-400">Lumina</h3>
+                <h3 className="text-2xl font-bold text-blue-400">Edusbest</h3>
               </div>
               <p className="text-gray-400">
                 Your personal AI tutor for WAEC success.
@@ -343,7 +352,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Lumina. All rights reserved.</p>
+            <p>&copy; 2024 Edusbest. All rights reserved.</p>
           </div>
         </div>
       </footer>
