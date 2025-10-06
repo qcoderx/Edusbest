@@ -93,11 +93,11 @@ export default function HomePage() {
                 <Image
                   src="/placeholder-logo.svg"
                   alt="Edusbest Logo"
-                  width={32}
-                  height={32}
+                  width={34}
+                  height={34}
                 />
                 <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                  Edusbest
+                  Lumina
                 </span>
               </Link>
               <div className="hidden md:flex space-x-8">
