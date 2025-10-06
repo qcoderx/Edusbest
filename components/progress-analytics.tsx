@@ -37,7 +37,8 @@ export function ProgressAnalytics({ userProfile }: ProgressAnalyticsProps) {
   const chartData = useMemo(() => {
     if (!studentData) return { progressData: [], skillRadarData: [] };
 
-    const { activities, profile } = studentData;
+    const { profile } = studentData;
+const activities = studentData.quizHistory || [];
 
     const weeks = Array.from({ length: 8 }, (_, i) =>
       subWeeks(new Date(), 7 - i)
@@ -47,7 +48,7 @@ export function ProgressAnalytics({ userProfile }: ProgressAnalyticsProps) {
       const weekEnd = new Date(weekStart);
       weekEnd.setDate(weekEnd.getDate() + 7);
 
-      const weekActivities = activities.filter((act) => {
+      const weekActivities = activities.filter((act: { completedAt: string | number | Date; }) => {
         const actDate = new Date(act.completedAt);
         return actDate >= weekStart && actDate < weekEnd;
       });
