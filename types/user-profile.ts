@@ -4,7 +4,8 @@ export interface UserProfile {
   age: number;
   gradeLevel: string;
   educationBackground: string;
-  examType: string; // New field for the selected exam
+  examTypes: string[]; // Changed from examType to examTypes (array)
+  interests: string[]; // Added interests field
 
   // Learning Preferences
   learningStyle: string[];

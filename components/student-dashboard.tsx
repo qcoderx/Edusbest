@@ -19,18 +19,20 @@ import {
   Calendar,
   Notebook,
   Sparkles,
+  BookCheck,
 } from "lucide-react";
-import { AdaptiveLearningPath } from "./adaptive-learning-path";
-import { PersonalizedContent } from "./personalized-content";
-import { ProgressAnalytics } from "./progress-analytics";
-import { ContentLibrary } from "./content-library";
+import { AdaptiveLearningPath } from "@/components/adaptive-learning-path";
+import { PersonalizedContent } from "@/components/personalized-content";
+import { ProgressAnalytics } from "@/components/progress-analytics";
+import { ContentLibrary } from "@/components/content-library";
 import { useData } from "@/context/DataContext";
 import Link from "next/link";
+import { WaecTutorChat } from "@/components/waec-tutor-chat";
+import { JambTutorChat } from "@/components/jamb-tutor-chat"; // Import the new JAMB chat component
 
 export function StudentDashboard() {
   const { studentData } = useData();
 
-  // This state is crucial. It holds the subject the user has selected.
   const [selectedSubject, setSelectedSubject] = useState(
     studentData?.profile.subjects[0]?.subject || ""
   );
@@ -52,6 +54,7 @@ export function StudentDashboard() {
   }
 
   const { profile, stats } = studentData;
+  const { examTypes = [] } = profile;
 
   const overallProgress =
     profile.subjects.length > 0
@@ -73,11 +76,13 @@ export function StudentDashboard() {
           </p>
         </div>
 
+        {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10 animate-fade-in delay-200">
-          {/* Card: Overall Progress */}
           <Card className="border-0 shadow-2xl bg-white/90 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl transition-all duration-300 hover:shadow-3xl hover:-translate-y-1 animate-bounce-slow">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-semibold text-indigo-700 dark:text-indigo-300">Overall Progress</CardTitle>
+              <CardTitle className="text-sm font-semibold text-indigo-700 dark:text-indigo-300">
+                Overall Progress
+              </CardTitle>
               <TrendingUp className="h-5 w-5 text-indigo-500 dark:text-indigo-400 drop-shadow-md" />
             </CardHeader>
             <CardContent>
@@ -87,78 +92,120 @@ export function StudentDashboard() {
               <Progress value={overallProgress} className="mt-2" />
             </CardContent>
           </Card>
-
-          {/* Card: Learning Streak */}
           <Card className="border-0 shadow-2xl bg-white/90 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl transition-all duration-300 hover:shadow-3xl hover:-translate-y-1 animate-bounce-slow delay-100">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-semibold text-purple-700 dark:text-purple-300">Learning Streak</CardTitle>
+              <CardTitle className="text-sm font-semibold text-purple-700 dark:text-purple-300">
+                Learning Streak
+              </CardTitle>
               <Clock className="h-5 w-5 text-purple-500 dark:text-purple-400 drop-shadow-md" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-extrabold text-purple-700 dark:text-purple-300">{stats.streakDays} days</div>
-              <p className="text-xs text-gray-500 dark:text-gray-400">Keep it up!</p>
+              <div className="text-3xl font-extrabold text-purple-700 dark:text-purple-300">
+                {stats.streakDays} days
+              </div>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Keep it up!
+              </p>
             </CardContent>
           </Card>
-
-          {/* Card: Total Points */}
           <Card className="border-0 shadow-2xl bg-white/90 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl transition-all duration-300 hover:shadow-3xl hover:-translate-y-1 animate-bounce-slow delay-200">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-semibold text-yellow-700 dark:text-yellow-300">Total Points</CardTitle>
+              <CardTitle className="text-sm font-semibold text-yellow-700 dark:text-yellow-300">
+                Total Points
+              </CardTitle>
               <Award className="h-5 w-5 text-yellow-500 dark:text-yellow-400 drop-shadow-md" />
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-extrabold text-yellow-700 dark:text-yellow-300">
                 {stats.totalPoints.toLocaleString()}
               </div>
-              <p className="text-xs text-gray-500 dark:text-gray-400">from lessons and quizzes</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                from lessons and quizzes
+              </p>
             </CardContent>
           </Card>
-
-          {/* Card: Active Subjects */}
           <Card className="border-0 shadow-2xl bg-white/90 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl transition-all duration-300 hover:shadow-3xl hover:-translate-y-1 animate-bounce-slow delay-300">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-semibold text-green-700 dark:text-green-300">Active Subjects</CardTitle>
+              <CardTitle className="text-sm font-semibold text-green-700 dark:text-green-300">
+                Active Subjects
+              </CardTitle>
               <BookOpen className="h-5 w-5 text-green-500 dark:text-green-400 drop-shadow-md" />
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-extrabold text-green-700 dark:text-green-300">
                 {profile.subjects.length}
               </div>
-              <p className="text-xs text-gray-500 dark:text-gray-400">All on track</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                All on track
+              </p>
             </CardContent>
           </Card>
         </div>
 
-        <Tabs defaultValue="study-schedule" className="space-y-6 animate-fade-in delay-300">
+        <Tabs
+          defaultValue="ai-learning"
+          className="space-y-6 animate-fade-in delay-300"
+        >
           <TabsList className="grid w-full grid-cols-4 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-xl shadow hover:shadow-lg transition-all">
-            <TabsTrigger value="study-schedule" className="hover:scale-105 transition-transform">
+            <TabsTrigger
+              value="ai-learning"
+              className="hover:scale-105 transition-transform"
+            >
+              <Sparkles className="mr-2 h-5 w-5 text-purple-500 dark:text-purple-400 drop-shadow-md" />
+              AI Learning
+            </TabsTrigger>
+            <TabsTrigger
+              value="study-schedule"
+              className="hover:scale-105 transition-transform"
+            >
               <Calendar className="mr-2 h-5 w-5 text-blue-500 dark:text-blue-400 drop-shadow-md" />
               Study Schedule
             </TabsTrigger>
-            <TabsTrigger value="ai-generator" className="hover:scale-105 transition-transform">
-              <Sparkles className="mr-2 h-5 w-5 text-purple-500 dark:text-purple-400 drop-shadow-md" />
-              AI Generator
-            </TabsTrigger>
-            <TabsTrigger value="content-library" className="hover:scale-105 transition-transform">
+            <TabsTrigger
+              value="content-library"
+              className="hover:scale-105 transition-transform"
+            >
               <Notebook className="mr-2 h-5 w-5 text-green-500 dark:text-green-400 drop-shadow-md" />
               Content Library
             </TabsTrigger>
-            <TabsTrigger value="performance" className="hover:scale-105 transition-transform">
+            <TabsTrigger
+              value="performance"
+              className="hover:scale-105 transition-transform"
+            >
               <TrendingUp className="mr-2 h-5 w-5 text-yellow-500 dark:text-yellow-400 drop-shadow-md" />
               Performance
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="study-schedule">
-            <AdaptiveLearningPath userProfile={profile} />
+          <TabsContent value="ai-learning">
+            <div className="space-y-8">
+              {examTypes.includes("WAEC") && (
+                <WaecTutorChat userProfile={profile} />
+              )}
+              {examTypes.includes("JAMB") && (
+                <JambTutorChat userProfile={profile} />
+              )}
+              {(examTypes.includes("Other") ||
+                examTypes.includes("Post-UTME") ||
+                examTypes.includes("School Exam")) && (
+                <PersonalizedContent
+                  userProfile={profile}
+                  selectedSubject={selectedSubject}
+                  onSubjectChange={setSelectedSubject}
+                />
+              )}
+              {examTypes.length === 0 && (
+                <PersonalizedContent
+                  userProfile={profile}
+                  selectedSubject={selectedSubject}
+                  onSubjectChange={setSelectedSubject}
+                />
+              )}
+            </div>
           </TabsContent>
 
-          <TabsContent value="ai-generator">
-            <PersonalizedContent
-              userProfile={profile}
-              selectedSubject={selectedSubject}
-              onSubjectChange={setSelectedSubject}
-            />
+          <TabsContent value="study-schedule">
+            <AdaptiveLearningPath userProfile={profile} />
           </TabsContent>
 
           <TabsContent value="content-library">

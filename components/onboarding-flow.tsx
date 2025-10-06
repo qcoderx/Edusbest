@@ -33,21 +33,23 @@ import {
   Clock,
   BookOpen,
   Settings,
+  Lightbulb,
 } from "lucide-react";
-import { useLocalStorage } from "@/hooks/use-local-storage";
+import { useLocalStorage } from "../hooks/use-local-storage";
 
 interface OnboardingFlowProps {
   onComplete: (profile: UserProfile) => void;
 }
 
-const TOTAL_STEPS = 8; // Increased total steps to accommodate the new exam selection step
+const TOTAL_STEPS = 8;
 
 export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useLocalStorage<Partial<UserProfile>>(
     "userProfile",
     {
-      examType: "", // Initialize examType
+      examTypes: [], // Changed to examTypes array
+      interests: [], // Added interests array
       subjects: [],
       learningStyle: [],
       preferredStudyTime: [],
@@ -187,7 +189,16 @@ function ExamSelectionStep({
   formData: Partial<UserProfile>;
   updateFormData: (updates: Partial<UserProfile>) => void;
 }) {
-  const exams = ["WAEC", "JAMB", "NECO", "School Exam", "Other"];
+  const exams = ["WAEC", "JAMB", "Post-UTME", "School Exam", "Other"];
+
+  const handleExamChange = (exam: string) => {
+    const currentExams = formData.examTypes || [];
+    const updatedExams = currentExams.includes(exam)
+      ? currentExams.filter((e) => e !== exam)
+      : [...currentExams, exam];
+    updateFormData({ examTypes: updatedExams });
+  };
+
   return (
     <Card className="border-0 shadow-2xl bg-white/90 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl">
       <CardHeader className="text-center pb-6">
@@ -195,33 +206,35 @@ function ExamSelectionStep({
           <Target className="h-6 w-6 text-blue-600" />
         </div>
         <CardTitle className="text-2xl font-extrabold">
-          Which exam are you preparing for?
+          Which exam(s) are you preparing for?
         </CardTitle>
         <CardDescription className="text-base">
-          This will help us tailor the experience for you.
+          Select all that apply. This will help us tailor the experience for
+          you.
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <Select
-          value={formData.examType || ""}
-          onValueChange={(value) => updateFormData({ examType: value })}
-        >
-          <SelectTrigger className="h-12">
-            <SelectValue placeholder="Select an exam" />
-          </SelectTrigger>
-          <SelectContent>
-            {exams.map((exam) => (
-              <SelectItem key={exam} value={exam}>
-                {exam}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      <CardContent className="space-y-4">
+        {exams.map((exam) => (
+          <div
+            key={exam}
+            className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/50 transition-colors"
+            onClick={() => handleExamChange(exam)}
+          >
+            <Checkbox
+              id={exam}
+              checked={formData.examTypes?.includes(exam)}
+              onCheckedChange={() => handleExamChange(exam)}
+            />
+            <Label htmlFor={exam} className="ml-3 text-base cursor-pointer">
+              {exam}
+            </Label>
+          </div>
+        ))}
       </CardContent>
     </Card>
   );
 }
-
+// --- PersonalInfoStep remains the same ---
 function PersonalInfoStep({
   formData,
   updateFormData,
@@ -284,36 +297,11 @@ function PersonalInfoStep({
                 <SelectValue placeholder="Select grade level" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem
-                  value="elementary"
-                  className="hover:scale-105 transition-transform"
-                >
-                  Elementary (K-5)
-                </SelectItem>
-                <SelectItem
-                  value="middle"
-                  className="hover:scale-105 transition-transform"
-                >
-                  Middle School (6-8)
-                </SelectItem>
-                <SelectItem
-                  value="high"
-                  className="hover:scale-105 transition-transform"
-                >
-                  High School (9-12)
-                </SelectItem>
-                <SelectItem
-                  value="college"
-                  className="hover:scale-105 transition-transform"
-                >
-                  College/University
-                </SelectItem>
-                <SelectItem
-                  value="adult"
-                  className="hover:scale-105 transition-transform"
-                >
-                  Adult Learner
-                </SelectItem>
+                <SelectItem value="elementary">Elementary (K-5)</SelectItem>
+                <SelectItem value="middle">Middle School (6-8)</SelectItem>
+                <SelectItem value="high">High School (9-12)</SelectItem>
+                <SelectItem value="college">College/University</SelectItem>
+                <SelectItem value="adult">Adult Learner</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -331,44 +319,41 @@ function PersonalInfoStep({
                 <SelectValue placeholder="Select background" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem
-                  value="traditional"
-                  className="hover:scale-105 transition-transform"
-                >
-                  Traditional School
-                </SelectItem>
-                <SelectItem
-                  value="homeschool"
-                  className="hover:scale-105 transition-transform"
-                >
-                  Homeschooled
-                </SelectItem>
-                <SelectItem
-                  value="online"
-                  className="hover:scale-105 transition-transform"
-                >
-                  Online Learning
-                </SelectItem>
-                <SelectItem
-                  value="mixed"
-                  className="hover:scale-105 transition-transform"
-                >
-                  Mixed/Hybrid
-                </SelectItem>
-                <SelectItem
-                  value="self-taught"
-                  className="hover:scale-105 transition-transform"
-                >
-                  Self-Taught
-                </SelectItem>
+                <SelectItem value="traditional">Traditional School</SelectItem>
+                <SelectItem value="homeschool">Homeschooled</SelectItem>
+                <SelectItem value="online">Online Learning</SelectItem>
+                <SelectItem value="mixed">Mixed/Hybrid</SelectItem>
+                <SelectItem value="self-taught">Self-Taught</SelectItem>
               </SelectContent>
             </Select>
           </div>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="interests" className="text-sm font-medium">
+            Your Interests
+          </Label>
+          <Textarea
+            id="interests"
+            placeholder="List some of your hobbies or interests (e.g., football, video games, music, movies). The AI will use these to make explanations more relatable for you."
+            value={formData.interests?.join(", ") || ""}
+            onChange={(e) =>
+              updateFormData({
+                interests: e.target.value
+                  .split(",")
+                  .map((i) => i.trim())
+                  .filter(Boolean),
+              })
+            }
+            className="min-h-[100px] px-4 py-3 rounded-lg border border-indigo-200 dark:border-indigo-800 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-700 transition-all"
+          />
         </div>
       </CardContent>
     </Card>
   );
 }
+
+// --- Other steps (LearningStyle, SubjectPreferences, etc.) remain the same ---
+// --- For brevity, I'll only show the relevant changed components ---
 
 function LearningStyleStep({
   formData,
@@ -835,42 +820,14 @@ function ScheduleStep({
               <SelectValue placeholder="Select your preferred study environment" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem
-                value="quiet-room"
-                className="hover:scale-105 transition-transform"
-              >
-                Quiet Room
-              </SelectItem>
-              <SelectItem
-                value="background-music"
-                className="hover:scale-105 transition-transform"
-              >
+              <SelectItem value="quiet-room">Quiet Room</SelectItem>
+              <SelectItem value="background-music">
                 With Background Music
               </SelectItem>
-              <SelectItem
-                value="library"
-                className="hover:scale-105 transition-transform"
-              >
-                Library Setting
-              </SelectItem>
-              <SelectItem
-                value="cafe"
-                className="hover:scale-105 transition-transform"
-              >
-                Cafe/Social Environment
-              </SelectItem>
-              <SelectItem
-                value="outdoors"
-                className="hover:scale-105 transition-transform"
-              >
-                Outdoors
-              </SelectItem>
-              <SelectItem
-                value="flexible"
-                className="hover:scale-105 transition-transform"
-              >
-                Flexible/Varies
-              </SelectItem>
+              <SelectItem value="library">Library Setting</SelectItem>
+              <SelectItem value="cafe">Cafe/Social Environment</SelectItem>
+              <SelectItem value="outdoors">Outdoors</SelectItem>
+              <SelectItem value="flexible">Flexible/Varies</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -1006,30 +963,12 @@ function LearningCharacteristicsStep({
                 <SelectValue placeholder="Select difficulty preference" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem
-                  value="gradual"
-                  className="hover:scale-105 transition-transform"
-                >
-                  Gradual Progression
-                </SelectItem>
-                <SelectItem
-                  value="challenging"
-                  className="hover:scale-105 transition-transform"
-                >
+                <SelectItem value="gradual">Gradual Progression</SelectItem>
+                <SelectItem value="challenging">
                   Challenging from Start
                 </SelectItem>
-                <SelectItem
-                  value="mixed"
-                  className="hover:scale-105 transition-transform"
-                >
-                  Mixed Difficulty
-                </SelectItem>
-                <SelectItem
-                  value="adaptive"
-                  className="hover:scale-105 transition-transform"
-                >
-                  Fully Adaptive
-                </SelectItem>
+                <SelectItem value="mixed">Mixed Difficulty</SelectItem>
+                <SelectItem value="adaptive">Fully Adaptive</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -1046,30 +985,10 @@ function LearningCharacteristicsStep({
                 <SelectValue placeholder="Select feedback preference" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem
-                  value="immediate"
-                  className="hover:scale-105 transition-transform"
-                >
-                  Immediate Feedback
-                </SelectItem>
-                <SelectItem
-                  value="delayed"
-                  className="hover:scale-105 transition-transform"
-                >
-                  Delayed Feedback
-                </SelectItem>
-                <SelectItem
-                  value="summary"
-                  className="hover:scale-105 transition-transform"
-                >
-                  Summary Feedback
-                </SelectItem>
-                <SelectItem
-                  value="minimal"
-                  className="hover:scale-105 transition-transform"
-                >
-                  Minimal Feedback
-                </SelectItem>
+                <SelectItem value="immediate">Immediate Feedback</SelectItem>
+                <SelectItem value="delayed">Delayed Feedback</SelectItem>
+                <SelectItem value="summary">Summary Feedback</SelectItem>
+                <SelectItem value="minimal">Minimal Feedback</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -1230,7 +1149,7 @@ function ReviewStep({ formData }: { formData: Partial<UserProfile> }) {
                 Grade: {formData.gradeLevel}
               </p>
               <p className="text-sm text-blue-800 dark:text-blue-200">
-                Exam: {formData.examType}
+                Exams: {formData.examTypes?.join(", ")}
               </p>
             </div>
 
@@ -1301,20 +1220,21 @@ function ReviewStep({ formData }: { formData: Partial<UserProfile> }) {
                 ))}
               </div>
             </div>
-
-            <div className="p-4 bg-red-50 rounded-lg dark:bg-red-900">
-              <h3 className="font-semibold text-red-900 dark:text-red-300 mb-2">
-                Preferences
+            <div className="p-4 bg-pink-50 rounded-lg dark:bg-pink-900">
+              <h3 className="font-semibold text-pink-900 dark:text-pink-300 mb-2">
+                Interests
               </h3>
-              <p className="text-sm text-red-800 dark:text-red-200">
-                Difficulty: {formData.difficultyPreference}
-              </p>
-              <p className="text-sm text-red-800 dark:text-red-200">
-                Feedback: {formData.feedbackPreference}
-              </p>
-              <p className="text-sm text-red-800 dark:text-red-200">
-                Environment: {formData.studyEnvironment}
-              </p>
+              <div className="flex flex-wrap gap-1">
+                {formData.interests?.map((interest) => (
+                  <Badge
+                    key={interest}
+                    variant="secondary"
+                    className="text-xs bg-pink-200 text-pink-800 dark:bg-pink-800 dark:text-pink-200"
+                  >
+                    {interest}
+                  </Badge>
+                ))}
+              </div>
             </div>
           </div>
         </div>
