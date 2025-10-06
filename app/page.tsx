@@ -93,12 +93,12 @@ export default function HomePage() {
       {/* Left side (Logo + Links) */}
       <div className="flex items-center space-x-8">
         <Link href="/" className="flex items-center space-x-2">
-          <Image
+          {/* <Image
             src="/placeholder-logo.svg"
             alt="Lumina Logo"
             width={34}
             height={34}
-          />
+          /> */}
           <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
             Lumina
           </span>
