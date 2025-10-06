@@ -8,9 +8,9 @@ import { Suspense } from "react";
 import { Loader2 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Curio - AI-Powered Learning Content Curation",
-  description: "Personalized learning content curation powered by AI. Discover, learn, and grow with Curio.",
-  generator: "Curio Team",
+  title: "Lumina - AI-Powered Learning Content Curation",
+  description: "Personalized learning content curation powered by AI. Discover, learn, and grow with Lumina.",
+  generator: "Team Lumina",
 };
 
 export default function RootLayout({
