@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation"; // Import the router
 import { Button } from "../components/ui/button";
 import { useState, useEffect } from "react";
+import { Header } from "@/components/Header";
 import {
   BookOpen,
   Brain,
@@ -85,55 +86,64 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 z-50 transition-colors duration-200">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-8">
-              <Link href="/" className="flex items-center space-x-2">
-                <Image
-                  src="/placeholder-logo.svg"
-                  alt="Edusbest Logo"
-                  width={34}
-                  height={34}
-                />
-                <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                  Lumina
-                </span>
-              </Link>
-              <div className="hidden md:flex space-x-8">
-                <Link
-                  href="/"
-                  className="text-sm font-medium text-blue-600 dark:text-blue-400"
-                >
-                  Home
-                </Link>
-                <Link
-                  href="/about"
-                  className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
-                >
-                  About
-                </Link>
-                <Link
-                  href="/contact"
-                  className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
-                >
-                  Contact
-                </Link>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Button
-                onClick={handleStartOnboarding}
-                className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6 py-2 text-sm font-semibold transition-all duration-200 hover:scale-105 shadow-lg"
-              >
-                Get Started
-                <ChevronRight className="ml-2 h-4 w-4" />
-              </Button>
-            </div>
-          </div>
+ {/* Navigation */}
+<nav className="fixed top-0 w-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 z-50 transition-colors duration-200">
+  <div className="container mx-auto px-4 py-4">
+    <div className="flex items-center justify-between">
+      {/* Left side (Logo + Links) */}
+      <div className="flex items-center space-x-8">
+        <Link href="/" className="flex items-center space-x-2">
+          <Image
+            src="/placeholder-logo.svg"
+            alt="Lumina Logo"
+            width={34}
+            height={34}
+          />
+          <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+            Lumina
+          </span>
+        </Link>
+        <div className="hidden md:flex space-x-8">
+          <Link
+            href="/"
+            className="text-sm font-medium text-blue-600 dark:text-blue-400"
+          >
+            Home
+          </Link>
+          <Link
+            href="/about"
+            className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+          >
+            About
+          </Link>
+          <Link
+            href="/contact"
+            className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+          >
+            Contact
+          </Link>
         </div>
-      </nav>
+      </div>
 
+      {/* ✅ Right side (Get Started + Theme Toggle beside each other) */}
+      <div className="flex items-center space-x-12 relative">
+        <Button
+          onClick={handleStartOnboarding}
+          className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6 py-2 text-sm font-semibold transition-all duration-200 hover:scale-105 shadow-lg"
+        >
+          Get Started
+          <ChevronRight className="ml-2 h-4 w-4" />
+        </Button>
+        {/* 👇 Move Header inside the same flex container */}
+        <div className="relative top-0 right-0">
+          <Header />
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<Header />
       {/* Hero Section */}
       <section className="pt-24 pb-16 bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-200">
         <div className="container mx-auto px-4">
@@ -150,7 +160,7 @@ export default function HomePage() {
               </span>
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Edusbest is your personal AI tutor for WAEC success. Get
+              Lumina is your personal AI tutor for WAEC success. Get
               step-by-step explanations, personalized quizzes, and progress
               tracking to ace your exams.
             </p>
@@ -191,7 +201,7 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              Why Choose Edusbest?
+              Why Choose Lumina?
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               Our AI-powered platform delivers personalized content that adapts
@@ -259,7 +269,7 @@ export default function HomePage() {
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
             Join thousands of students who are already transforming their
-            studies with Edusbest. Start your personalized learning journey
+            studies with Lumina. Start your personalized learning journey
             today.
           </p>
           <Button
@@ -281,11 +291,11 @@ export default function HomePage() {
               <div className="flex items-center space-x-2 mb-4">
                 <Image
                   src="/placeholder-logo.svg"
-                  alt="Edusbest Logo"
+                  alt="Lumina Logo"
                   width={24}
                   height={24}
                 />
-                <h3 className="text-2xl font-bold text-blue-400">Edusbest</h3>
+                <h3 className="text-2xl font-bold text-blue-400">Lumina</h3>
               </div>
               <p className="text-gray-400">
                 Your personal AI tutor for WAEC success.
@@ -352,7 +362,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Edusbest. All rights reserved.</p>
+            <p>&copy; 2024 Lumina. All rights reserved.</p>
           </div>
         </div>
       </footer>
