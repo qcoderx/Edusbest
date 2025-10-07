@@ -55,6 +55,8 @@ export function StudentDashboard() {
 
   const { profile, stats } = studentData;
   const { examTypes = [] } = profile;
+  const [activeTab, setActiveTab] = useState("ai-learning");
+  
 
   const overallProgress =
     profile.subjects.length > 0
@@ -142,80 +144,99 @@ export function StudentDashboard() {
           </Card>
         </div>
 
-        <Tabs
-          defaultValue="ai-learning"
-          className="space-y-6 animate-fade-in delay-300"
-        >
-          <TabsList className="grid w-full grid-cols-4 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-xl shadow hover:shadow-lg transition-all">
-            <TabsTrigger
-              value="ai-learning"
-              className="hover:scale-105 transition-transform"
-            >
-              <Sparkles className="mr-2 h-5 w-5 text-purple-500 dark:text-purple-400 drop-shadow-md" />
-              AI Learning
-            </TabsTrigger>
-            <TabsTrigger
-              value="study-schedule"
-              className="hover:scale-105 transition-transform"
-            >
-              <Calendar className="mr-2 h-5 w-5 text-blue-500 dark:text-blue-400 drop-shadow-md" />
-              Study Schedule
-            </TabsTrigger>
-            <TabsTrigger
-              value="content-library"
-              className="hover:scale-105 transition-transform"
-            >
-              <Notebook className="mr-2 h-5 w-5 text-green-500 dark:text-green-400 drop-shadow-md" />
-              Content Library
-            </TabsTrigger>
-            <TabsTrigger
-              value="performance"
-              className="hover:scale-105 transition-transform"
-            >
-              <TrendingUp className="mr-2 h-5 w-5 text-yellow-500 dark:text-yellow-400 drop-shadow-md" />
-              Performance
-            </TabsTrigger>
-          </TabsList>
+<Tabs
+  value={activeTab}
+  onValueChange={setActiveTab}
+  className="space-y-6 animate-fade-in delay-300"
+>
+  {/* Mobile Dropdown - shows only on mobile */}
+  <div className="block md:hidden">
+    <select 
+      className="w-full p-3 rounded-xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl shadow hover:shadow-lg transition-all border-0 text-gray-700 dark:text-gray-300"
+      onChange={(e) => setActiveTab(e.target.value)}
+      value={activeTab}
+    >
+      <option value="ai-learning">🤖 AI Learning</option>
+      <option value="study-schedule">📅 Study Schedule</option>
+      <option value="content-library">📚 Content Library</option>
+      <option value="performance">📊 Performance</option>
+    </select>
+  </div>
 
-          <TabsContent value="ai-learning">
-            <div className="space-y-8">
-              {examTypes.includes("WAEC") && (
-                <WaecTutorChat userProfile={profile} />
-              )}
-              {examTypes.includes("JAMB") && (
-                <JambTutorChat userProfile={profile} />
-              )}
-              {(examTypes.includes("Other") ||
-                examTypes.includes("Post-UTME") ||
-                examTypes.includes("School Exam")) && (
-                <PersonalizedContent
-                  userProfile={profile}
-                  selectedSubject={selectedSubject}
-                  onSubjectChange={setSelectedSubject}
-                />
-              )}
-              {examTypes.length === 0 && (
-                <PersonalizedContent
-                  userProfile={profile}
-                  selectedSubject={selectedSubject}
-                  onSubjectChange={setSelectedSubject}
-                />
-              )}
-            </div>
-          </TabsContent>
+  {/* Desktop Tabs - shows only on tablet and larger screens */}
+  <div className="hidden md:block">
+    <TabsList className="grid w-full grid-cols-4 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-xl shadow hover:shadow-lg transition-all">
+      <TabsTrigger
+        value="ai-learning"
+        className="hover:scale-105 transition-transform"
+      >
+        <Sparkles className="mr-2 h-5 w-5 text-purple-500 dark:text-purple-400 drop-shadow-md" />
+        AI Learning
+      </TabsTrigger>
+      <TabsTrigger
+        value="study-schedule"
+        className="hover:scale-105 transition-transform"
+      >
+        <Calendar className="mr-2 h-5 w-5 text-blue-500 dark:text-blue-400 drop-shadow-md" />
+        Study Schedule
+      </TabsTrigger>
+      <TabsTrigger
+        value="content-library"
+        className="hover:scale-105 transition-transform"
+      >
+        <Notebook className="mr-2 h-5 w-5 text-green-500 dark:text-green-400 drop-shadow-md" />
+        Content Library
+      </TabsTrigger>
+      <TabsTrigger
+        value="performance"
+        className="hover:scale-105 transition-transform"
+      >
+        <TrendingUp className="mr-2 h-5 w-5 text-yellow-500 dark:text-yellow-400 drop-shadow-md" />
+        Performance
+      </TabsTrigger>
+    </TabsList>
+  </div>
 
-          <TabsContent value="study-schedule">
-            <AdaptiveLearningPath userProfile={profile} />
-          </TabsContent>
+  {/* Tab Content - This will automatically update when activeTab changes */}
+  <TabsContent value="ai-learning">
+    <div className="space-y-8">
+      {examTypes.includes("WAEC") && (
+        <WaecTutorChat userProfile={profile} />
+      )}
+      {examTypes.includes("JAMB") && (
+        <JambTutorChat userProfile={profile} />
+      )}
+      {(examTypes.includes("Other") ||
+        examTypes.includes("Post-UTME") ||
+        examTypes.includes("School Exam")) && (
+        <PersonalizedContent
+          userProfile={profile}
+          selectedSubject={selectedSubject}
+          onSubjectChange={setSelectedSubject}
+        />
+      )}
+      {examTypes.length === 0 && (
+        <PersonalizedContent
+          userProfile={profile}
+          selectedSubject={selectedSubject}
+          onSubjectChange={setSelectedSubject}
+        />
+      )}
+    </div>
+  </TabsContent>
 
-          <TabsContent value="content-library">
-            <ContentLibrary />
-          </TabsContent>
+  <TabsContent value="study-schedule">
+    <AdaptiveLearningPath userProfile={profile} />
+  </TabsContent>
 
-          <TabsContent value="performance">
-            <ProgressAnalytics userProfile={profile} />
-          </TabsContent>
-        </Tabs>
+  <TabsContent value="content-library">
+    <ContentLibrary />
+  </TabsContent>
+
+  <TabsContent value="performance">
+    <ProgressAnalytics userProfile={profile} />
+  </TabsContent>
+</Tabs>
       </div>
     </div>
   );
