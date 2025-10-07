@@ -123,8 +123,9 @@ export function WaecTutorChat({ userProfile }: WaecTutorChatProps) {
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="flex-1 flex flex-col p-0">
-        <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
+     <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
+  <ScrollArea className="flex-1 p-4 h-full max-h-[550px]" ref={scrollAreaRef}>
+
           <div className="space-y-4">
             {messages.map((message) => (
               <div
