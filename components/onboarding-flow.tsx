@@ -244,110 +244,110 @@ function PersonalInfoStep({
 }) {
   return (
     <Card className="border-0 shadow-2xl bg-white/90 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl transition-all duration-300 hover:shadow-3xl hover:-translate-y-1">
-      <CardHeader className="text-center pb-6">
-        <div className="mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-          <BookOpen className="h-6 w-6 text-blue-600 drop-shadow-md" />
-        </div>
-        <CardTitle className="text-2xl font-extrabold">
-          Tell us about yourself
-        </CardTitle>
-        <CardDescription className="text-base">
-          Basic information to personalize your experience
-        </CardDescription>
-      </CardHeader>
       <CardContent className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <Label htmlFor="name" className="text-sm font-medium">
-              Full Name
-            </Label>
-            <Input
-              id="name"
-              placeholder="Enter your full name"
-              value={formData.name || ""}
-              onChange={(e) => updateFormData({ name: e.target.value })}
-              className="h-12 px-4 py-2 rounded-lg border border-indigo-200 dark:border-indigo-800 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-700 transition-all"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="age" className="text-sm font-medium">
-              Age
-            </Label>
-            <Input
-              id="age"
-              type="number"
-              placeholder="Your age"
-              value={formData.age || ""}
-              onChange={(e) =>
-                updateFormData({ age: Number.parseInt(e.target.value) })
-              }
-              className="h-12 px-4 py-2 rounded-lg border border-indigo-200 dark:border-indigo-800 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-700 transition-all"
-            />
-          </div>
-        </div>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="space-y-2">
+      <Label htmlFor="name" className="text-sm font-medium">
+        Full Name <span className="text-red-500">*</span>
+      </Label>
+      <Input
+        id="name"
+        placeholder="Enter your full name"
+        value={formData.name || ""}
+        onChange={(e) => updateFormData({ name: e.target.value })}
+        required
+        className="h-12 px-4 py-2 rounded-lg border border-indigo-200 dark:border-indigo-800 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-700 transition-all"
+      />
+    </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <Label className="text-sm font-medium">Grade Level</Label>
-            <Select
-              value={formData.gradeLevel || ""}
-              onValueChange={(value) => updateFormData({ gradeLevel: value })}
-            >
-              <SelectTrigger className="h-12 px-4 py-2 rounded-lg border border-indigo-200 dark:border-indigo-800 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-700 transition-all">
-                <SelectValue placeholder="Select grade level" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="elementary">Elementary (K-5)</SelectItem>
-                <SelectItem value="middle">Middle School (6-8)</SelectItem>
-                <SelectItem value="high">High School (9-12)</SelectItem>
-                <SelectItem value="college">College/University</SelectItem>
-                <SelectItem value="adult">Adult Learner</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <Label className="text-sm font-medium">
-              Educational Background
-            </Label>
-            <Select
-              value={formData.educationBackground || ""}
-              onValueChange={(value) =>
-                updateFormData({ educationBackground: value })
-              }
-            >
-              <SelectTrigger className="h-12 px-4 py-2 rounded-lg border border-indigo-200 dark:border-indigo-800 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-700 transition-all">
-                <SelectValue placeholder="Select background" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="traditional">Traditional School</SelectItem>
-                <SelectItem value="homeschool">Homeschooled</SelectItem>
-                <SelectItem value="online">Online Learning</SelectItem>
-                <SelectItem value="mixed">Mixed/Hybrid</SelectItem>
-                <SelectItem value="self-taught">Self-Taught</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="interests" className="text-sm font-medium">
-            Your Interests
-          </Label>
-          <Textarea
-            id="interests"
-            placeholder="List some of your hobbies or interests (e.g., football, video games, music, movies). The AI will use these to make explanations more relatable for you."
-            value={formData.interests?.join(", ") || ""}
-            onChange={(e) =>
-              updateFormData({
-                interests: e.target.value
-                  .split(",")
-                  .map((i) => i.trim())
-                  .filter(Boolean),
-              })
-            }
-            className="min-h-[100px] px-4 py-3 rounded-lg border border-indigo-200 dark:border-indigo-800 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-700 transition-all"
-          />
-        </div>
-      </CardContent>
+    <div className="space-y-2">
+      <Label htmlFor="age" className="text-sm font-medium">
+        Age <span className="text-red-500">*</span>
+      </Label>
+      <Input
+        id="age"
+        type="number"
+        placeholder="Your age"
+        value={formData.age || ""}
+        onChange={(e) =>
+          updateFormData({ age: Number.parseInt(e.target.value) })
+        }
+        required
+        className="h-12 px-4 py-2 rounded-lg border border-indigo-200 dark:border-indigo-800 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-700 transition-all"
+      />
+    </div>
+  </div>
+
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="space-y-2">
+      <Label className="text-sm font-medium">
+        Grade Level <span className="text-red-500">*</span>
+      </Label>
+      <Select
+        value={formData.gradeLevel || ""}
+        onValueChange={(value) => updateFormData({ gradeLevel: value })}
+        required
+      >
+        <SelectTrigger className="h-12 px-4 py-2 rounded-lg border border-indigo-200 dark:border-indigo-800 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-700 transition-all">
+          <SelectValue placeholder="Select grade level" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="elementary">Elementary (K-5)</SelectItem>
+          <SelectItem value="middle">Middle School (6-8)</SelectItem>
+          <SelectItem value="high">High School (9-12)</SelectItem>
+          <SelectItem value="college">College/University</SelectItem>
+          <SelectItem value="adult">Adult Learner</SelectItem>
+        </SelectContent>
+      </Select>
+    </div>
+
+    <div className="space-y-2">
+      <Label className="text-sm font-medium">
+        Educational Background <span className="text-red-500">*</span>
+      </Label>
+      <Select
+        value={formData.educationBackground || ""}
+        onValueChange={(value) =>
+          updateFormData({ educationBackground: value })
+        }
+        required
+      >
+        <SelectTrigger className="h-12 px-4 py-2 rounded-lg border border-indigo-200 dark:border-indigo-800 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-700 transition-all">
+          <SelectValue placeholder="Select background" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="traditional">Traditional School</SelectItem>
+          <SelectItem value="homeschool">Homeschooled</SelectItem>
+          <SelectItem value="online">Online Learning</SelectItem>
+          <SelectItem value="mixed">Mixed/Hybrid</SelectItem>
+          <SelectItem value="self-taught">Self-Taught</SelectItem>
+        </SelectContent>
+      </Select>
+    </div>
+  </div>
+
+  <div className="space-y-2">
+    <Label htmlFor="interests" className="text-sm font-medium">
+      Your Interests <span className="text-red-500">*</span>
+    </Label>
+    <Textarea
+      id="interests"
+      placeholder="List some of your hobbies or interests..."
+      value={formData.interests?.join(", ") || ""}
+      onChange={(e) =>
+        updateFormData({
+          interests: e.target.value
+            .split(",")
+            .map((i) => i.trim())
+            .filter(Boolean),
+        })
+      }
+      required
+      className="min-h-[100px] px-4 py-3 rounded-lg border border-indigo-200 dark:border-indigo-800 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-700 transition-all"
+    />
+  </div>
+</CardContent>
+
     </Card>
   );
 }

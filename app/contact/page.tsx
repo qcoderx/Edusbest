@@ -34,12 +34,12 @@ export default function ContactPage() {
               <Link href="/" className="flex items-center space-x-2">
                 <Image
                   src="/placeholder-logo.svg"
-                  alt="Edusbest Logo"
+                  alt="Lumina Logo"
                   width={32}
                   height={32}
                 />
                 <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                  Edusbest
+                  Lumina
                 </span>
               </Link>
               <div className="hidden md:flex space-x-8">
@@ -95,7 +95,7 @@ export default function ContactPage() {
               <span className="text-blue-600 dark:text-blue-400">Touch</span>
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Have questions about Edusbest? Want to learn more about our
+              Have questions about Lumina? Want to learn more about our
               AI-powered content curation platform? We'd love to hear from you!
             </p>
           </div>
@@ -186,10 +186,10 @@ export default function ContactPage() {
                       Email
                     </h3>
                     <p className="text-gray-600 dark:text-gray-300">
-                      hello@edusbest.com
+                      hello@Lumina.com
                     </p>
                     <p className="text-gray-600 dark:text-gray-300">
-                      support@edusbest.com
+                      support@Lumina.com
                     </p>
                   </div>
                 </div>
@@ -255,7 +255,7 @@ export default function ContactPage() {
               Meet the Developers
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Edusbest was created by passionate developers dedicated to
+              Lumina was created by passionate developers dedicated to
               transforming learning through innovative technology solutions.
             </p>
           </div>
@@ -366,7 +366,7 @@ export default function ContactPage() {
               Frequently Asked Questions
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Find answers to common questions about Edusbest and our platform.
+              Find answers to common questions about Lumina and our platform.
             </p>
           </div>
           <div className="max-w-3xl mx-auto space-y-4">
@@ -382,7 +382,7 @@ export default function ContactPage() {
             </div>
             <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 border border-gray-100 dark:border-gray-700">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                Is Edusbest free to use?
+                Is Lumina free to use?
               </h3>
               <p className="text-gray-600 dark:text-gray-300">
                 Yes! We offer a free forever plan with access to core features.
@@ -420,7 +420,7 @@ export default function ContactPage() {
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
             Join thousands of learners who are already experiencing the future
-            of content curation with Edusbest's AI-powered platform.
+            of content curation with Lumina's AI-powered platform.
           </p>
           <Link href="/student">
             <Button

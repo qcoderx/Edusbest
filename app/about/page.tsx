@@ -33,12 +33,12 @@ export default function AboutPage() {
               <Link href="/" className="flex items-center space-x-2">
                 <Image
                   src="/placeholder-logo.svg"
-                  alt="Edusbest Logo"
+                  alt="Lumina Logo"
                   width={32}
                   height={32}
                 />
                 <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                  Edusbest
+                  Lumina
                 </span>
               </Link>
               <div className="hidden md:flex space-x-8">
@@ -91,7 +91,7 @@ export default function AboutPage() {
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
               About{" "}
-              <span className="text-blue-600 dark:text-blue-400">Edusbest</span>
+              <span className="text-blue-600 dark:text-blue-400">Lumina</span>
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
               We're revolutionizing learning through AI-powered content
@@ -111,7 +111,7 @@ export default function AboutPage() {
                 Our Mission
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-                At Edusbest, we believe that every learner deserves personalized
+                At Lumina, we believe that every learner deserves personalized
                 content curation that adapts to their unique interests, pace,
                 and learning style. Our AI-powered platform bridges knowledge
                 gaps and empowers learners to discover their full potential.
@@ -361,7 +361,7 @@ export default function AboutPage() {
           </h2>
           <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
             Join thousands of learners who are already transforming their
-            learning with Edusbest's AI-powered content curation platform.
+            learning with Lumina's AI-powered content curation platform.
           </p>
           <Link href="/student">
             <Button
